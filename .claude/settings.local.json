@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm run db:init:*)",
+      "Bash(npm run index:*)",
+      "Bash(timeout /t 5)",
+      "Bash(ping:*)",
+      "Bash(findstr:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(npm run api:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm run analyze:*)",
+      "Bash(curl:*)",
+      "Bash(npx json-format)",
+      "Bash(npm install:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)"
+    ]
+  }
+}

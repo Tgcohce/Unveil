@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShadowWire Transactions Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-slate-900 text-white p-8">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl font-bold mb-6 text-green-400">
+        ShadowWire Unmasked Transactions
+      </h1>
+      <p class="text-slate-400 mb-8">
+        Unlike Privacy Cash, ShadowWire reveals sender and recipient addresses
+        on-chain. Below are real transactions showing exactly who sent to whom.
+      </p>
+
+      <div id="loading" class="text-center py-12">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"
+        ></div>
+        <p class="text-slate-400 mt-4">Loading transactions...</p>
+      </div>
+
+      <div id="transfers" class="space-y-4"></div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:3006";
+
+      async function loadTransfers() {
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/shadowwire/transfers?limit=20`,
+          );
+          const data = await response.json();
+
+          document.getElementById("loading").style.display = "none";
+
+          const transfersDiv = document.getElementById("transfers");
+          const transfers = data.transfers || [];
+
+          if (transfers.length === 0) {
+            transfersDiv.innerHTML =
+              '<p class="text-slate-400 text-center">No transfers found.</p>';
+            return;
+          }
+
+          transfers.forEach((transfer) => {
+            const card = document.createElement("div");
+            card.className =
+              "bg-slate-800 rounded-lg p-6 border border-green-500/30";
+
+            const formatTime = (timestamp) =>
+              new Date(timestamp).toLocaleString();
+            const getSolscanLink = (id, type) => {
+              return `https://solscan.io/${type}/${id}`;
+            };
+
+            card.innerHTML = `
+            <div class="flex items-center gap-2 mb-4">
+              <span class="text-sm font-bold text-green-400">💸 Transfer</span>
+              <span class="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded">
+                ${transfer.transferType || "external"}
+              </span>
+              <span class="text-xs text-orange-400">⚠️ Amount hidden (Bulletproofs)</span>
+            </div>
+            
+            <div class="space-y-4">
+              <!-- From Section -->
+              <div class="bg-slate-900/50 rounded-lg p-3">
+                <div class="text-slate-500 text-xs mb-2">FROM (Sender - VISIBLE!):</div>
+                <a href="${getSolscanLink(transfer.sender, "address")}" 
+                   target="_blank"
+                   class="text-red-400 hover:text-red-300 hover:underline font-mono text-xs break-all">
+                  ${transfer.sender} ↗
+                </a>
+              </div>
+              
+              <!-- To Section -->
+              <div class="bg-slate-900/50 rounded-lg p-3">
+                <div class="text-slate-500 text-xs mb-2">TO (Recipient - VISIBLE!):</div>
+                <a href="${getSolscanLink(transfer.recipient, "address")}" 
+                   target="_blank"
+                   class="text-red-400 hover:text-red-300 hover:underline font-mono text-xs break-all">
+                  ${transfer.recipient} ↗
+                </a>
+              </div>
+              
+              <!-- Amount and Time -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <div class="text-slate-500 text-xs mb-1">Amount:</div>
+                  <div class="text-orange-400 font-semibold">🔒 Hidden</div>
+                  <div class="text-slate-500 text-xs mt-1">(Bulletproof ZK proof)</div>
+                </div>
+                <div>
+                  <div class="text-slate-500 text-xs mb-1">When:</div>
+                  <div class="text-slate-300 text-sm">${formatTime(transfer.timestamp)}</div>
+                </div>
+              </div>
+              
+              <!-- Transaction Link -->
+              <div class="pt-3 border-t border-slate-700">
+                <a href="${getSolscanLink(transfer.signature, "tx")}" 
+                   target="_blank"
+                   class="text-blue-400 hover:text-blue-300 text-xs hover:underline">
+                  View on Solscan ↗
+                </a>
+                <span class="text-slate-600 mx-2">•</span>
+                <span class="text-slate-500 text-xs font-mono">
+                  ${transfer.signature.slice(0, 16)}...
+                </span>
+              </div>
+            </div>
+            
+            <!-- Privacy Warning -->
+            <div class="mt-4 pt-3 border-t border-red-500/20 bg-red-500/5 rounded p-3">
+              <div class="text-xs text-red-300 flex items-start gap-2">
+                <span class="mt-0.5">⚠️</span>
+                <span>
+                  <strong>Privacy BROKEN:</strong> Both sender and recipient addresses 
+                  are visible on-chain. Anyone can see who sent money to whom. The 
+                  Bulletproof only hides the amount, which is insufficient for privacy.
+                </span>
+              </div>
+            </div>
+          `;
+
+            transfersDiv.appendChild(card);
+          });
+
+          // Add summary
+          const summary = document.createElement("div");
+          summary.className =
+            "mt-8 bg-orange-500/10 border border-orange-500/30 rounded-lg p-6 text-center";
+          summary.innerHTML = `
+          <p class="text-orange-400 font-semibold mb-2">
+            📊 Showing ${transfers.length} transactions
+          </p>
+          <p class="text-slate-400 text-sm">
+            All sender and recipient addresses are publicly visible on the Solana blockchain.
+            This demonstrates that Bulletproofs alone (amount hiding) are insufficient for privacy
+            when addresses remain visible.
+          </p>
+        `;
+          transfersDiv.appendChild(summary);
+        } catch (error) {
+          console.error("Error loading transfers:", error);
+          document.getElementById("loading").innerHTML = `
+          <p class="text-red-400">Error loading transfers: ${error.message}</p>
+          <p class="text-slate-400 text-sm mt-2">Make sure the API server is running on port 3006</p>
+        `;
+        }
+      }
+
+      loadTransfers();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+# Just ignore backend files - let Root Directory setting handle the rest
+data/
+src/indexer/
+src/analysis/
+src/api/
+*.db
+*.db.*
+*.log
