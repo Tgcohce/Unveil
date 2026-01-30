@@ -15,7 +15,9 @@
       "Bash(npx json-format)",
       "Bash(npm install:*)",
       "Bash(ls:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(nvm install:*)",
+      "Bash(nvm use:*)"
     ]
   }
 }

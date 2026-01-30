@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./LandingPage";
 import Dashboard from "./Dashboard";
+import UnicornBackground from "./components/UnicornBackground";
 import "./index.css";
 
 // Error boundary for catching React errors
@@ -95,6 +96,8 @@ if (rootElement) {
     <React.StrictMode>
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
+          {/* Unicorn Studio Background - persists across all routes */}
+          <UnicornBackground />
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />

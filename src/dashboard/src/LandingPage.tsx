@@ -1,347 +1,411 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function LandingPage() {
   const [mounted, setMounted] = useState(false);
+  const orbRef = useRef<HTMLDivElement>(null);
+  const [orbPosition, setOrbPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    console.log("LandingPage mounted");
   }, []);
 
-  // If not mounted yet, show a simple loading state
+  useEffect(() => {
+    if (!mounted) return;
+
+    let animationId: number;
+    let velocityX = 0;
+    let velocityY = 0;
+    const friction = 0.92;
+    const spring = 0.05;
+
+    const animate = () => {
+      if (!isDragging) {
+        const dx = 0 - orbPosition.x;
+        const dy = 0 - orbPosition.y;
+        velocityX += dx * spring;
+        velocityY += dy * spring;
+        velocityX *= friction;
+        velocityY *= friction;
+
+        if (Math.abs(orbPosition.x) > 0.5 || Math.abs(orbPosition.y) > 0.5) {
+          setOrbPosition((prev) => ({
+            x: prev.x + velocityX,
+            y: prev.y + velocityY,
+          }));
+        }
+      }
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
+  }, [isDragging, orbPosition, mounted]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !orbRef.current) return;
+    const rect = orbRef.current.parentElement?.getBoundingClientRect();
+    if (!rect) return;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    setOrbPosition({
+      x: (e.clientX - centerX) * 0.5,
+      y: (e.clientY - centerY) * 0.5,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
   if (!mounted) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#0f172a",
-          color: "white",
-          fontFamily: "Inter, sans-serif",
-        }}
-      >
-        <div>Loading UNVEIL...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="font-serif italic text-2xl text-zen-text-sub">
+          Loading...
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-dark-gradient text-slate-200 min-h-screen flex flex-col font-display antialiased overflow-x-hidden selection:bg-primary/20 relative">
-      {/* Animated Background Blobs */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full mix-blend-lighten filter blur-[80px] opacity-30 animate-blob"></div>
-        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full mix-blend-lighten filter blur-[80px] opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-32 left-1/3 w-[600px] h-[600px] bg-indigo-500/10 rounded-full mix-blend-lighten filter blur-[100px] opacity-25 animate-blob animation-delay-4000"></div>
-      </div>
-
-      {/* Floating Navigation */}
-      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
-        <nav className="flex items-center gap-6 md:gap-12 bg-slate-800/80 backdrop-blur-md border border-slate-700 px-8 py-3 rounded-full shadow-lg">
-          <Link
-            to="/"
-            className="group flex flex-col items-center gap-1 text-slate-200 hover:text-primary transition-colors"
-          >
-            <span className="material-symbols-outlined text-[20px] font-light">
-              change_history
-            </span>
-            <span className="text-[10px] uppercase tracking-widest font-mono opacity-0 group-hover:opacity-100 absolute -bottom-5 transition-opacity">
-              Home
-            </span>
-          </Link>
-          <Link
-            to="/dashboard"
-            className="group flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors"
-          >
-            <span className="material-symbols-outlined text-[20px] font-light">
-              grid_view
-            </span>
-            <span className="text-[10px] uppercase tracking-widest font-mono opacity-0 group-hover:opacity-100 absolute -bottom-5 transition-opacity">
-              Dashboard
-            </span>
-          </Link>
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors"
-          >
-            <span className="material-symbols-outlined text-[20px] font-light">
-              circle
-            </span>
-            <span className="text-[10px] uppercase tracking-widest font-mono opacity-0 group-hover:opacity-100 absolute -bottom-5 transition-opacity">
-              GitHub
-            </span>
-          </a>
-        </nav>
-      </div>
-
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-24 pb-12 px-6 z-10">
-        <div className="z-10 text-center flex flex-col items-center gap-6 mb-12 animate-[fadeIn_1s_ease-out]">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-white max-w-4xl leading-[1.1]">
-            Solana Privacy <br />
-            <span className="font-normal italic text-primary">Benchmark</span>
-          </h1>
-          <p className="text-slate-400 font-display text-lg md:text-xl max-w-lg mx-auto leading-relaxed">
-            Measuring privacy guarantees through on-chain analysis.
-          </p>
-        </div>
-
-        {/* Monolith Image Placeholder */}
-        <div className="relative w-full max-w-[300px] md:max-w-[400px] aspect-square flex items-center justify-center mb-16 group cursor-pointer">
-          <div className="relative w-full h-full flex items-center justify-center animate-float">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-primary/15 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div className="w-48 h-64 md:w-64 md:h-80 bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-lg rounded-2xl border border-slate-700 shadow-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-              <span className="material-symbols-outlined text-8xl text-primary opacity-50">
-                lock
-              </span>
-            </div>
+    <div
+      className="min-h-screen flex flex-col font-sans antialiased overflow-x-hidden relative selection:bg-zen-indigo/20"
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
+      <nav className="w-full px-8 md:px-12 py-8 flex items-center justify-between z-50 fixed top-0 left-0 bg-gradient-to-b from-white/40 to-transparent backdrop-blur-sm">
+        <Link to="/" className="flex items-center gap-3 group cursor-pointer">
+          <div className="w-8 h-8 rounded-full border border-zen-text-main/10 flex items-center justify-center">
+            <div className="w-1.5 h-1.5 bg-zen-indigo rounded-full"></div>
           </div>
-        </div>
+          <span className="font-serif italic text-2xl tracking-wide text-zen-text-main">
+            Unveil
+          </span>
+        </Link>
 
-        {/* Stats Overlay */}
-        <div className="w-full max-w-7xl mx-auto md:absolute md:inset-0 md:pointer-events-none px-6 md:px-12 py-12 flex flex-col md:justify-between h-full z-0 gap-8">
-          <div className="flex flex-col md:flex-row justify-between w-full items-start">
-            <div className="flex flex-col gap-1 md:pointer-events-auto group glass-card p-4 rounded-xl">
-              <span className="text-xs uppercase tracking-widest text-slate-400 font-mono mb-1 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>{" "}
-                Network Status
-              </span>
-              <span className="text-2xl font-mono font-medium text-white group-hover:text-primary transition-colors">
-                Mainnet-Beta
-              </span>
-              <span className="text-sm font-mono text-slate-400">
-                Solana Network
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 md:text-right md:pointer-events-auto group glass-card p-4 rounded-xl mt-4 md:mt-0">
-              <span className="text-xs uppercase tracking-widest text-slate-400 font-mono mb-1">
-                Protocols Tested
-              </span>
-              <span className="text-2xl font-mono font-medium text-white group-hover:text-primary transition-colors">
-                3
-              </span>
-              <span className="text-sm font-mono text-slate-400">
-                Active Benchmarks
-              </span>
-            </div>
+        <div className="flex items-center gap-10">
+          <div className="hidden md:flex gap-8">
+            <a
+              href="#features"
+              className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#protocols"
+              className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
+            >
+              Protocols
+            </a>
           </div>
-          <div className="flex flex-col md:flex-row justify-between w-full items-end mt-auto">
-            <div className="flex flex-col gap-1 md:pointer-events-auto group w-full md:w-auto glass-card p-4 rounded-xl">
-              <span className="text-xs uppercase tracking-widest text-slate-400 font-mono mb-1">
-                Privacy Score
-              </span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-mono font-bold text-red-400">
-                  16
-                </span>
-                <span className="text-lg font-mono text-slate-400">/ 100</span>
-              </div>
-              <span className="text-sm font-display italic text-slate-400 mt-1">
-                "Room for improvement"
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 md:text-right mt-8 md:mt-0 md:pointer-events-auto group w-full md:w-auto glass-card p-4 rounded-xl">
-              <span className="text-xs uppercase tracking-widest text-slate-400 font-mono mb-1">
-                Analysis Methods
-              </span>
-              <span className="text-2xl font-mono font-medium text-white group-hover:text-primary transition-colors">
-                Timing Analysis
-              </span>
-              <span className="text-sm font-mono text-slate-400">
-                Amount Patterns
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Button */}
-        <div className="mt-12 z-20">
           <Link
             to="/dashboard"
-            className="relative overflow-hidden group bg-slate-800/50 backdrop-blur-sm border border-slate-700 hover:border-primary/70 text-white px-10 py-4 rounded-full transition-all duration-500 shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)] hover:shadow-[0_0_40px_-5px_rgba(99,102,241,0.5)] inline-block"
+            className="btn-zen group"
           >
-            <div className="absolute inset-0 w-0 bg-primary/10 transition-all duration-[400ms] ease-out group-hover:w-full"></div>
-            <span className="relative font-display font-medium text-sm tracking-wide group-hover:text-primary flex items-center gap-3">
-              View Live Dashboard{" "}
-              <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
-                arrow_forward
-              </span>
-            </span>
+            <span>Enter App</span>
           </Link>
         </div>
-      </section>
+      </nav>
 
-      {/* Protocol Cards Section */}
-      <section className="relative z-10 py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl text-white mb-4">
-              Tested Protocols
+      <main className="relative z-10 flex-grow flex flex-col w-full max-w-[1400px] mx-auto pt-32 px-6 md:px-12">
+        <section className="min-h-[85vh] flex flex-col items-center justify-center relative pb-20">
+          <div className="text-center relative z-20 mb-8 animate-fade-in select-none">
+            <h2 className="section-subtitle reactive-text">
+              Solana Privacy Benchmark
             </h2>
-            <p className="font-mono text-xs uppercase tracking-widest text-slate-400">
-              Real-World Privacy Analysis
+            <h1 className="font-serif font-light text-6xl md:text-8xl lg:text-9xl text-zen-text-main tracking-tighter leading-[0.9] mb-8 reactive-text">
+              Architectural
+              <br />
+              <span className="italic text-zen-text-sub/70 font-thin">
+                Silence
+              </span>
+            </h1>
+            <p className="font-sans text-zen-text-sub max-w-md mx-auto leading-7 text-sm opacity-70 tracking-wide reactive-text">
+              We quantify the invisible. A living audit of on-chain anonymity
+              designed for the profound observer.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Privacy Cash */}
-            <div className="glass-card relative group p-8 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:bg-slate-800/60 hover:-translate-y-2">
-              <div className="absolute -right-20 -top-20 w-60 h-60 bg-red-500/10 rounded-full blur-[60px] group-hover:bg-red-500/20 transition-colors"></div>
-              <div className="h-48 w-full flex items-center justify-center mb-8 relative">
-                <span className="material-symbols-outlined text-8xl text-red-400 opacity-50 animate-float">
-                  lock_open
-                </span>
+
+          <div className="relative w-full h-[400px] flex items-center justify-center select-none my-[-40px] z-30">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full orbital-line opacity-30 animate-spin-slow"></div>
+              <div className="w-[320px] h-[320px] md:w-[480px] md:h-[480px] rounded-full orbital-line opacity-20 animate-spin-reverse-slow border-dashed"></div>
+            </div>
+
+            <div
+              ref={orbRef}
+              className={`relative w-48 h-48 md:w-64 md:h-64 rounded-full glass-sphere shadow-sphere-glow 
+                ${isDragging ? "" : "animate-float"} 
+                flex items-center justify-center cursor-grab active:cursor-grabbing transition-shadow duration-300`}
+              style={{
+                transform: `translate(${orbPosition.x}px, ${orbPosition.y}px)`,
+              }}
+              onMouseDown={handleMouseDown}
+            >
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-zen-indigo/10 to-transparent opacity-60 pointer-events-none"></div>
+              <div className="w-full h-full rounded-full bg-zen-indigo/5 animate-pulse-slow blur-2xl absolute pointer-events-none"></div>
+              <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.8)] relative z-20 pointer-events-none"></div>
+            </div>
+          </div>
+
+          <div className="mt-8 z-20">
+            <Link
+              to="/dashboard"
+              className="group relative px-10 py-4 overflow-hidden rounded-full border border-zen-text-main/10 
+                       transition-all duration-500 hover:border-zen-indigo/30 bg-white/30 backdrop-blur-md inline-flex items-center gap-3"
+            >
+              <span className="relative z-10 font-sans text-sm font-semibold tracking-wide text-zen-text-main group-hover:text-zen-indigo transition-colors">
+                View Live Dashboard
+              </span>
+              <span className="material-symbols-outlined text-lg text-zen-text-main group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
+                arrow_forward
+              </span>
+              <div className="absolute inset-0 bg-zen-indigo/5 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+            </Link>
+          </div>
+
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3 opacity-30">
+            <span className="h-16 w-[1px] bg-zen-text-main"></span>
+            <span className="font-sans text-[9px] tracking-[0.3em] uppercase">
+              Scroll
+            </span>
+          </div>
+        </section>
+
+        <section
+          id="features"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-12 relative z-20 pb-32"
+        >
+          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[360px] group animate-fade-in stagger-1">
+            <div className="flex-grow">
+              <div className="icon-container mb-8">
+                <span className="material-symbols-outlined">query_stats</span>
               </div>
+              <h3 className="font-serif text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500">
+                Profound Insights
+              </h3>
+              <p className="font-sans text-sm text-zen-text-sub leading-loose opacity-80">
+                The Living Audit. Continuous privacy health monitoring
+                interpreted through architectural clarity. We transform raw data
+                into a narrative of digital hygiene.
+              </p>
+            </div>
+            <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
+              <span className="font-sans text-[10px] uppercase tracking-widest text-zen-text-main">
+                Explore Audit
+              </span>
+              <span className="material-symbols-outlined text-sm">
+                arrow_forward
+              </span>
+            </div>
+          </article>
+
+          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[360px] group mt-0 md:mt-12 animate-fade-in stagger-2">
+            <div className="flex-grow">
+              <div className="icon-container mb-8">
+                <span className="material-symbols-outlined">grain</span>
+              </div>
+              <h3 className="font-serif text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500">
+                Visual Topology
+              </h3>
+              <p className="font-sans text-sm text-zen-text-sub leading-loose opacity-80">
+                Particle Cloud technology visualizes transaction pools as
+                organic matter. Witness probabilistic linkages form and dissolve
+                in the ether of the blockchain.
+              </p>
+            </div>
+            <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
+              <span className="font-sans text-[10px] uppercase tracking-widest text-zen-text-main">
+                View Topology
+              </span>
+              <span className="material-symbols-outlined text-sm">
+                arrow_forward
+              </span>
+            </div>
+          </article>
+
+          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[360px] group mt-0 md:mt-24 animate-fade-in stagger-3">
+            <div className="flex-grow">
+              <div className="icon-container mb-8">
+                <span className="material-symbols-outlined">graphic_eq</span>
+              </div>
+              <h3 className="font-serif text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500">
+                Real-time Resonance
+              </h3>
+              <p className="font-sans text-sm text-zen-text-sub leading-loose opacity-80">
+                Direct on-chain telemetry offering instant feedback loops.
+                Detect exposure vectors and correlation events the moment they
+                ripple through the Solana mainnet.
+              </p>
+            </div>
+            <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
+              <span className="font-sans text-[10px] uppercase tracking-widest text-zen-text-main">
+                Live Telemetry
+              </span>
+              <span className="material-symbols-outlined text-sm">
+                arrow_forward
+              </span>
+            </div>
+          </article>
+        </section>
+
+        <section id="protocols" className="pb-32">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="section-subtitle">Real-World Privacy Analysis</h2>
+            <h3 className="section-header">
+              Tested <span className="italic font-light">Protocols</span>
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="glass-card p-8 relative group overflow-hidden animate-fade-in stagger-1">
+              <div className="absolute -right-20 -top-20 w-60 h-60 bg-red-500/5 rounded-full blur-[60px] group-hover:bg-red-500/10 transition-colors"></div>
               <div className="relative z-10">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-2xl font-display text-white group-hover:text-red-400 transition-colors">
-                    Privacy Cash
-                  </h3>
-                  <span className="material-symbols-outlined text-red-400">
-                    warning
+                <div className="flex justify-between items-start mb-6">
+                  <div className="icon-container">
+                    <span className="material-symbols-outlined text-red-400">
+                      lock_open
+                    </span>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-bold uppercase tracking-wider">
+                    Vulnerable
                   </span>
                 </div>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-slate-500 mb-8 border-b border-slate-700 pb-4">
+                <h3 className="font-serif text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors">
+                  Privacy Cash
+                </h3>
+                <p className="text-[10px] font-sans uppercase tracking-widest text-zen-text-sub mb-6">
                   Mixing Protocol
                 </p>
-                <div className="space-y-6">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between text-xs font-mono text-slate-400 uppercase tracking-wider">
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-xs font-sans text-zen-text-sub uppercase tracking-wider mb-2">
                       <span>Privacy Score</span>
-                      <span className="text-red-400 font-bold">16/100</span>
+                      <span className="text-red-500 font-bold">16/100</span>
                     </div>
-                    <div className="h-1 w-full bg-slate-700 rounded-full overflow-hidden">
-                      <div className="h-full bg-red-500 w-[16%]"></div>
+                    <div className="h-1 w-full bg-zen-text-main/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-red-500 w-[16%] rounded-full"></div>
                     </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                      Status
-                    </span>
-                    <span className="text-sm font-display italic text-red-400">
-                      Broken
-                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Confidential Transfers */}
-            <div className="glass-card relative group p-8 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:bg-slate-800/60 hover:-translate-y-2 delay-100">
-              <div className="absolute -left-20 -bottom-20 w-60 h-60 bg-blue-500/10 rounded-full blur-[60px] group-hover:bg-blue-500/20 transition-colors"></div>
-              <div className="h-48 w-full flex items-center justify-center mb-8 relative">
-                <span
-                  className="material-symbols-outlined text-8xl text-blue-400 opacity-50 animate-float"
-                  style={{ animationDelay: "1s" }}
-                >
-                  shield
-                </span>
-              </div>
+            <div className="glass-card p-8 relative group overflow-hidden animate-fade-in stagger-2">
+              <div className="absolute -left-20 -bottom-20 w-60 h-60 bg-blue-500/5 rounded-full blur-[60px] group-hover:bg-blue-500/10 transition-colors"></div>
               <div className="relative z-10">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-2xl font-display text-white group-hover:text-blue-400 transition-colors">
-                    Confidential Transfers
-                  </h3>
-                  <span className="material-symbols-outlined text-blue-400">
-                    encrypted
+                <div className="flex justify-between items-start mb-6">
+                  <div className="icon-container">
+                    <span className="material-symbols-outlined text-blue-400">
+                      shield
+                    </span>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-bold uppercase tracking-wider">
+                    No Usage
                   </span>
                 </div>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-slate-500 mb-8 border-b border-slate-700 pb-4">
+                <h3 className="font-serif text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors">
+                  Confidential Transfers
+                </h3>
+                <p className="text-[10px] font-sans uppercase tracking-widest text-zen-text-sub mb-6">
                   Token-2022 Feature
                 </p>
-                <div className="space-y-6">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between text-xs font-mono text-slate-400 uppercase tracking-wider">
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-xs font-sans text-zen-text-sub uppercase tracking-wider mb-2">
                       <span>Adoption</span>
-                      <span className="text-white font-bold">0%</span>
+                      <span className="text-zen-text-main font-bold">0%</span>
                     </div>
-                    <div className="h-1 w-full bg-slate-700 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 w-[0%]"></div>
+                    <div className="h-1 w-full bg-zen-text-main/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 w-[0%] rounded-full"></div>
                     </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                      Status
-                    </span>
-                    <span className="text-sm font-display italic text-slate-300">
-                      No Usage
-                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* ShadowWire */}
-            <div className="glass-card relative group p-8 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:bg-slate-800/60 hover:-translate-y-2 delay-200">
-              <div className="absolute right-0 bottom-0 w-40 h-40 bg-purple-500/10 rounded-full blur-[60px] group-hover:bg-purple-500/20 transition-colors"></div>
-              <div className="h-48 w-full flex items-center justify-center mb-8 relative">
-                <span
-                  className="material-symbols-outlined text-8xl text-purple-400 opacity-50 animate-float"
-                  style={{ animationDelay: "2s" }}
-                >
-                  target
-                </span>
-              </div>
+            <div className="glass-card p-8 relative group overflow-hidden animate-fade-in stagger-3">
+              <div className="absolute right-0 bottom-0 w-40 h-40 bg-purple-500/5 rounded-full blur-[60px] group-hover:bg-purple-500/10 transition-colors"></div>
               <div className="relative z-10">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-2xl font-display text-white group-hover:text-purple-400 transition-colors">
-                    ShadowWire
-                  </h3>
-                  <span className="material-symbols-outlined text-purple-400">
-                    psychology
+                <div className="flex justify-between items-start mb-6">
+                  <div className="icon-container">
+                    <span className="material-symbols-outlined text-purple-400">
+                      psychology
+                    </span>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-bold uppercase tracking-wider">
+                    Defeated
                   </span>
                 </div>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-slate-500 mb-8 border-b border-slate-700 pb-4">
+                <h3 className="font-serif text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors">
+                  ShadowWire
+                </h3>
+                <p className="text-[10px] font-sans uppercase tracking-widest text-zen-text-sub mb-6">
                   Bulletproof ZK
                 </p>
-                <div className="space-y-6">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between text-xs font-mono text-slate-400 uppercase tracking-wider">
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-xs font-sans text-zen-text-sub uppercase tracking-wider mb-2">
                       <span>Privacy Score</span>
-                      <span className="text-red-400 font-bold">0/100</span>
+                      <span className="text-red-500 font-bold">0/100</span>
                     </div>
-                    <div className="h-1 w-full bg-slate-700 rounded-full overflow-hidden">
-                      <div className="h-full bg-purple-500 w-[0%]"></div>
+                    <div className="h-1 w-full bg-zen-text-main/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-purple-500 w-[0%] rounded-full"></div>
                     </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                      Status
-                    </span>
-                    <span className="text-sm font-display italic text-red-400">
-                      Defeated
-                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex justify-center mt-16 opacity-70 hover:opacity-100 transition-opacity">
+
+          <div className="flex justify-center mt-16">
             <Link
               to="/dashboard"
-              className="font-display text-sm text-slate-400 hover:text-primary transition-colors flex items-center gap-2 group"
+              className="font-sans text-sm text-zen-text-sub hover:text-zen-indigo transition-colors flex items-center gap-2 group"
             >
               View Full Analysis
-              <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">
+              <span className="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">
                 arrow_right_alt
               </span>
             </Link>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Footer */}
-      <footer className="py-8 text-center border-t border-slate-800 bg-slate-900/30 backdrop-blur-sm z-10">
-        <p className="font-display text-xs text-slate-500 uppercase tracking-widest">
-          UNVEIL © 2025 •{" "}
-          <span className="font-mono lowercase text-[10px]">
-            Educational Research Tool
-          </span>
-        </p>
-      </footer>
+        <footer className="border-t border-zen-text-main/5 py-12 flex flex-col md:flex-row justify-between items-center text-zen-text-sub/50">
+          <p className="font-serif italic text-lg text-zen-text-main/80">
+            Unveil
+          </p>
+          <div className="flex gap-8 mt-4 md:mt-0 font-sans text-[10px] uppercase tracking-widest">
+            <a
+              href="#"
+              className="hover:text-zen-text-main transition-colors"
+            >
+              Terms
+            </a>
+            <a
+              href="#"
+              className="hover:text-zen-text-main transition-colors"
+            >
+              Privacy
+            </a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-zen-text-main transition-colors"
+            >
+              Documentation
+            </a>
+          </div>
+        </footer>
+      </main>
     </div>
   );
 }
