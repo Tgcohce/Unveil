@@ -1,67 +1,13 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { ParticleSphereScene } from "./components/ParticleSphereScene";
 
 function LandingPage() {
   const [mounted, setMounted] = useState(false);
-  const orbRef = useRef<HTMLDivElement>(null);
-  const [orbPosition, setOrbPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-
-    let animationId: number;
-    let velocityX = 0;
-    let velocityY = 0;
-    const friction = 0.92;
-    const spring = 0.05;
-
-    const animate = () => {
-      if (!isDragging) {
-        const dx = 0 - orbPosition.x;
-        const dy = 0 - orbPosition.y;
-        velocityX += dx * spring;
-        velocityY += dy * spring;
-        velocityX *= friction;
-        velocityY *= friction;
-
-        if (Math.abs(orbPosition.x) > 0.5 || Math.abs(orbPosition.y) > 0.5) {
-          setOrbPosition((prev) => ({
-            x: prev.x + velocityX,
-            y: prev.y + velocityY,
-          }));
-        }
-      }
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animationId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationId);
-  }, [isDragging, orbPosition, mounted]);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !orbRef.current) return;
-    const rect = orbRef.current.parentElement?.getBoundingClientRect();
-    if (!rect) return;
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    setOrbPosition({
-      x: (e.clientX - centerX) * 0.5,
-      y: (e.clientY - centerY) * 0.5,
-    });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
 
   if (!mounted) {
     return (
@@ -74,12 +20,7 @@ function LandingPage() {
   }
 
   return (
-    <div
-      className="min-h-screen flex flex-col font-sans antialiased overflow-x-hidden relative selection:bg-zen-indigo/20"
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-    >
+    <div className="min-h-screen flex flex-col font-sans antialiased overflow-x-hidden relative selection:bg-zen-indigo/20">
       <nav className="w-full px-8 md:px-12 py-8 flex items-center justify-between z-50 fixed top-0 left-0 bg-gradient-to-b from-white/40 to-transparent backdrop-blur-sm">
         <Link to="/" className="flex items-center gap-3 group cursor-pointer">
           <div className="w-8 h-8 rounded-full border border-zen-text-main/10 flex items-center justify-center">
@@ -133,25 +74,20 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="relative w-full h-[400px] flex items-center justify-center select-none my-[-40px] z-30">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full orbital-line opacity-30 animate-spin-slow"></div>
-              <div className="w-[320px] h-[320px] md:w-[480px] md:h-[480px] rounded-full orbital-line opacity-20 animate-spin-reverse-slow border-dashed"></div>
+          <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center select-none my-[-20px] z-30">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+              <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full orbital-line animate-spin-slow"></div>
+              <div className="w-[320px] h-[320px] md:w-[480px] md:h-[480px] rounded-full orbital-line animate-spin-reverse-slow border-dashed"></div>
             </div>
 
-            <div
-              ref={orbRef}
-              className={`relative w-48 h-48 md:w-64 md:h-64 rounded-full glass-sphere shadow-sphere-glow 
-                ${isDragging ? "" : "animate-float"} 
-                flex items-center justify-center cursor-grab active:cursor-grabbing transition-shadow duration-300`}
-              style={{
-                transform: `translate(${orbPosition.x}px, ${orbPosition.y}px)`,
-              }}
-              onMouseDown={handleMouseDown}
-            >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-zen-indigo/10 to-transparent opacity-60 pointer-events-none"></div>
-              <div className="w-full h-full rounded-full bg-zen-indigo/5 animate-pulse-slow blur-2xl absolute pointer-events-none"></div>
-              <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.8)] relative z-20 pointer-events-none"></div>
+            <div className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] relative z-10">
+              <Suspense fallback={
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-32 h-32 rounded-full bg-zen-indigo/10 animate-pulse"></div>
+                </div>
+              }>
+                <ParticleSphereScene />
+              </Suspense>
             </div>
           </div>
 
