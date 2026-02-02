@@ -50,10 +50,10 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
         }}
       ></div>
 
-      <aside className="w-16 lg:w-56 h-screen border-r border-zen-text-main/10 flex flex-col bg-white/80 backdrop-blur-sm z-50 transition-all duration-300 fixed left-0 top-0">
-        <div className="p-4 border-b border-zen-text-main/10 flex items-center gap-3">
+      <aside className="w-16 lg:w-56 h-screen border-r border-zen-text-main/5 flex flex-col bg-transparent backdrop-blur-md z-50 transition-all duration-300 fixed left-0 top-0">
+        <div className="p-4 border-b border-zen-text-main/5 flex items-center gap-3">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-full border border-zen-text-main flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 rounded-full border border-zen-text-main/20 flex items-center justify-center shrink-0 bg-white/30 backdrop-blur">
               <div className="w-1.5 h-1.5 bg-zen-indigo rounded-full"></div>
             </div>
             <span className="text-xl tracking-wide text-zen-text-main font-light hidden lg:block">
@@ -67,10 +67,10 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all ${
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                 isActive(item.path)
-                  ? "text-zen-text-main bg-zen-indigo/10 border-l-2 border-zen-indigo"
-                  : "text-zen-text-sub hover:text-zen-text-main hover:bg-zen-text-main/5"
+                  ? "text-zen-text-main bg-white/50 backdrop-blur border border-zen-indigo/20"
+                  : "text-zen-text-sub hover:text-zen-text-main hover:bg-white/30"
               }`}
             >
               <span className={`material-symbols-outlined text-xl ${
@@ -82,13 +82,7 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
                 {item.label}
               </span>
               {item.score !== null && (
-                <span className={`hidden lg:block ml-auto text-xs px-2 py-0.5 rounded-full ${
-                  item.score < 20 
-                    ? "bg-red-50 text-red-600" 
-                    : item.score < 50 
-                      ? "bg-orange-50 text-orange-600"
-                      : "bg-green-50 text-green-600"
-                }`}>
+                <span className="hidden lg:block ml-auto text-xs text-zen-text-sub/70">
                   {item.score}
                 </span>
               )}
@@ -96,10 +90,10 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
           ))}
         </nav>
 
-        <div className="p-4 border-t border-zen-text-main/10 hidden lg:block">
+        <div className="p-4 border-t border-zen-text-main/5 hidden lg:block">
           <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-            <span className="text-[11px] text-zen-text-sub">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500/70"></div>
+            <span className="text-[11px] text-zen-text-sub/70">
               Connected
             </span>
           </div>
@@ -107,7 +101,7 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
       </aside>
 
       <main className="flex-1 ml-16 lg:ml-56 h-screen overflow-y-auto relative z-10">
-        <header className="sticky top-0 z-40 px-6 py-3 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-zen-text-main/5">
+        <header className="sticky top-0 z-40 px-6 py-3 flex justify-between items-center bg-transparent backdrop-blur-md border-b border-zen-text-main/5">
           <div>
             <div className="flex items-center gap-2 text-zen-text-sub text-[11px] mb-0.5">
               <Link to="/dashboard" className="hover:text-zen-text-main transition-colors">Dashboard</Link>
