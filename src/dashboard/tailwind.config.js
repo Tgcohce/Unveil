@@ -24,8 +24,9 @@ export default {
         danger: "#ef4444",
       },
       fontFamily: {
-        serif: ["Cormorant Garamond", "serif"],
-        sans: ["Manrope", "sans-serif"],
+        serif: ['"Noto Sans"', "system-ui", "sans-serif"],
+        sans: ['"Noto Sans"', "system-ui", "sans-serif"],
+        display: ['"Noto Sans"', "system-ui", "sans-serif"],
         mono: ["ui-monospace", "SFMono-Regular", "monospace"],
       },
       boxShadow: {

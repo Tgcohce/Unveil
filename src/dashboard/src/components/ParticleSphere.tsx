@@ -2,7 +2,10 @@ import { useRef, useMemo } from "react"
 import { useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
 
+// GLB import 
+
 const PARTICLE_COUNT = 2000
+// cleanest imo, changeable param from blender
 const SPHERE_RADIUS = 2
 
 export function ParticleSphere() {
@@ -84,13 +87,17 @@ export function ParticleSphere() {
       let repelX = 0, repelY = 0, repelZ = 0
       if (dist2D > 0.001) {
         repelX = (dx / dist2D) * repelStrength
+        
         repelY = (dy / dist2D) * repelStrength
         repelZ = (origZ > 0 ? 1 : -1) * smoothInfluence * 0.5
       }
+
+
       
       const targetX = origX + repelX
       const targetY = origY + repelY
       const targetZ = origZ + repelZ
+
       
       const lerpFactor = 0.12
       posArray[i3] += (targetX - posArray[i3]) * lerpFactor

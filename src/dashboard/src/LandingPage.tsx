@@ -12,7 +12,7 @@ function LandingPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="font-serif italic text-2xl text-zen-text-sub">
+        <div style={{ fontFamily: '"Noto Sans", sans-serif' }} className="text-2xl text-zen-text-sub">
           Loading...
         </div>
       </div>
@@ -20,13 +20,19 @@ function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col font-sans antialiased overflow-x-hidden relative selection:bg-zen-indigo/20">
+    <div 
+      className="min-h-screen flex flex-col antialiased overflow-x-hidden relative selection:bg-zen-indigo/20"
+      style={{ fontFamily: '"Noto Sans", sans-serif' }}
+    >
       <nav className="w-full px-8 md:px-12 py-8 flex items-center justify-between z-50 fixed top-0 left-0 bg-gradient-to-b from-white/40 to-transparent backdrop-blur-sm">
         <Link to="/" className="flex items-center gap-3 group cursor-pointer">
           <div className="w-8 h-8 rounded-full border border-zen-text-main/10 flex items-center justify-center">
             <div className="w-1.5 h-1.5 bg-zen-indigo rounded-full"></div>
           </div>
-          <span className="font-serif italic text-2xl tracking-wide text-zen-text-main">
+          <span 
+            className="text-2xl tracking-wide text-zen-text-main font-light"
+            style={{ fontFamily: '"Noto Sans", sans-serif' }}
+          >
             Unveil
           </span>
         </Link>
@@ -35,22 +41,29 @@ function LandingPage() {
           <div className="hidden md:flex gap-8">
             <a
               href="#features"
-              className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
+              className="text-[11px] font-semibold tracking-[0.15em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
             >
               Features
             </a>
             <a
               href="#protocols"
-              className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
+              className="text-[11px] font-semibold tracking-[0.15em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
             >
               Protocols
             </a>
           </div>
           <Link
             to="/dashboard"
-            className="btn-zen group"
+            className="relative px-6 py-2.5 overflow-hidden rounded-full border border-zen-text-main/10 transition-all hover:border-zen-indigo/30 bg-white/20 backdrop-blur-md group"
           >
-            <span>Enter App</span>
+            <span 
+              className="relative z-10 text-xs font-semibold tracking-widest uppercase text-zen-text-main group-hover:text-zen-indigo transition-colors"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
+              Enter App
+            </span>
           </Link>
         </div>
       </nav>
@@ -58,17 +71,26 @@ function LandingPage() {
       <main className="relative z-10 flex-grow flex flex-col w-full max-w-[1400px] mx-auto pt-32 px-6 md:px-12">
         <section className="min-h-[85vh] flex flex-col items-center justify-center relative pb-20">
           <div className="text-center relative z-20 mb-8 animate-fade-in select-none">
-            <h2 className="section-subtitle reactive-text">
+            <h2 
+              className="text-zen-indigo text-xs font-semibold tracking-[0.3em] uppercase mb-6 opacity-90"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
               Solana Privacy Benchmark
             </h2>
-            <h1 className="font-serif font-light text-6xl md:text-8xl lg:text-9xl text-zen-text-main tracking-tighter leading-[0.9] mb-8 reactive-text">
+            <h1 
+              className="font-light text-6xl md:text-8xl lg:text-9xl text-zen-text-main tracking-tighter leading-[0.9] mb-8"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
               Architectural
               <br />
-              <span className="italic text-zen-text-sub/70 font-thin">
+              <span className="text-zen-text-sub/70 font-thin">
                 Silence
               </span>
             </h1>
-            <p className="font-sans text-zen-text-sub max-w-md mx-auto leading-7 text-sm opacity-70 tracking-wide reactive-text">
+            <p 
+              className="text-zen-text-sub max-w-md mx-auto leading-7 text-sm opacity-70 tracking-wide"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
               We quantify the invisible. A living audit of on-chain anonymity
               designed for the profound observer.
             </p>
@@ -97,7 +119,10 @@ function LandingPage() {
               className="group relative px-10 py-4 overflow-hidden rounded-full border border-zen-text-main/10 
                        transition-all duration-500 hover:border-zen-indigo/30 bg-white/30 backdrop-blur-md inline-flex items-center gap-3"
             >
-              <span className="relative z-10 font-sans text-sm font-semibold tracking-wide text-zen-text-main group-hover:text-zen-indigo transition-colors">
+              <span 
+                className="relative z-10 text-sm font-medium tracking-wide text-zen-text-main group-hover:text-zen-indigo transition-colors"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 View Live Dashboard
               </span>
               <span className="material-symbols-outlined text-lg text-zen-text-main group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
@@ -109,7 +134,10 @@ function LandingPage() {
 
           <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3 opacity-30">
             <span className="h-16 w-[1px] bg-zen-text-main"></span>
-            <span className="font-sans text-[9px] tracking-[0.3em] uppercase">
+            <span 
+              className="text-[9px] font-medium tracking-[0.3em] uppercase"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
               Scroll
             </span>
           </div>
@@ -124,17 +152,26 @@ function LandingPage() {
               <div className="icon-container mb-8">
                 <span className="material-symbols-outlined">query_stats</span>
               </div>
-              <h3 className="font-serif text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500">
+              <h3 
+                className="text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500 font-light"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 Profound Insights
               </h3>
-              <p className="font-sans text-sm text-zen-text-sub leading-loose opacity-80">
+              <p 
+                className="text-sm text-zen-text-sub leading-relaxed"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 The Living Audit. Continuous privacy health monitoring
                 interpreted through architectural clarity. We transform raw data
                 into a narrative of digital hygiene.
               </p>
             </div>
             <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-              <span className="font-sans text-[10px] uppercase tracking-widest text-zen-text-main">
+              <span 
+                className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 Explore Audit
               </span>
               <span className="material-symbols-outlined text-sm">
@@ -148,17 +185,26 @@ function LandingPage() {
               <div className="icon-container mb-8">
                 <span className="material-symbols-outlined">grain</span>
               </div>
-              <h3 className="font-serif text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500">
+              <h3 
+                className="text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500 font-light"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 Visual Topology
               </h3>
-              <p className="font-sans text-sm text-zen-text-sub leading-loose opacity-80">
+              <p 
+                className="text-sm text-zen-text-sub leading-relaxed"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 Particle Cloud technology visualizes transaction pools as
                 organic matter. Witness probabilistic linkages form and dissolve
                 in the ether of the blockchain.
               </p>
             </div>
             <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-              <span className="font-sans text-[10px] uppercase tracking-widest text-zen-text-main">
+              <span 
+                className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 View Topology
               </span>
               <span className="material-symbols-outlined text-sm">
@@ -172,17 +218,26 @@ function LandingPage() {
               <div className="icon-container mb-8">
                 <span className="material-symbols-outlined">graphic_eq</span>
               </div>
-              <h3 className="font-serif text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500">
+              <h3 
+                className="text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500 font-light"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 Real-time Resonance
               </h3>
-              <p className="font-sans text-sm text-zen-text-sub leading-loose opacity-80">
+              <p 
+                className="text-sm text-zen-text-sub leading-relaxed"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 Direct on-chain telemetry offering instant feedback loops.
                 Detect exposure vectors and correlation events the moment they
                 ripple through the Solana mainnet.
               </p>
             </div>
             <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-              <span className="font-sans text-[10px] uppercase tracking-widest text-zen-text-main">
+              <span 
+                className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
                 Live Telemetry
               </span>
               <span className="material-symbols-outlined text-sm">
@@ -194,9 +249,17 @@ function LandingPage() {
 
         <section id="protocols" className="pb-32">
           <div className="text-center mb-16 animate-fade-in">
-            <h2 className="section-subtitle">Real-World Privacy Analysis</h2>
-            <h3 className="section-header">
-              Tested <span className="italic font-light">Protocols</span>
+            <h2 
+              className="text-zen-indigo text-xs font-semibold tracking-[0.3em] uppercase mb-4 opacity-90"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
+              Real-World Privacy Analysis
+            </h2>
+            <h3 
+              className="text-4xl md:text-5xl text-zen-text-main tracking-tight font-light"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
+              Tested <span className="font-extralight">Protocols</span>
             </h3>
           </div>
 
@@ -210,19 +273,31 @@ function LandingPage() {
                       lock_open
                     </span>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-bold uppercase tracking-wider">
+                  <span 
+                    className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-semibold uppercase tracking-wider"
+                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                  >
                     Vulnerable
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors">
+                <h3 
+                  className="text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors font-medium"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
                   Privacy Cash
                 </h3>
-                <p className="text-[10px] font-sans uppercase tracking-widest text-zen-text-sub mb-6">
+                <p 
+                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-sub mb-6"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
                   Mixing Protocol
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between text-xs font-sans text-zen-text-sub uppercase tracking-wider mb-2">
+                    <div 
+                      className="flex justify-between text-xs text-zen-text-sub uppercase tracking-wider mb-2"
+                      style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                    >
                       <span>Privacy Score</span>
                       <span className="text-red-500 font-bold">16/100</span>
                     </div>
@@ -243,19 +318,31 @@ function LandingPage() {
                       shield
                     </span>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-bold uppercase tracking-wider">
+                  <span 
+                    className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-semibold uppercase tracking-wider"
+                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                  >
                     No Usage
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors">
+                <h3 
+                  className="text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors font-medium"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
                   Confidential Transfers
                 </h3>
-                <p className="text-[10px] font-sans uppercase tracking-widest text-zen-text-sub mb-6">
+                <p 
+                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-sub mb-6"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
                   Token-2022 Feature
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between text-xs font-sans text-zen-text-sub uppercase tracking-wider mb-2">
+                    <div 
+                      className="flex justify-between text-xs text-zen-text-sub uppercase tracking-wider mb-2"
+                      style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                    >
                       <span>Adoption</span>
                       <span className="text-zen-text-main font-bold">0%</span>
                     </div>
@@ -276,19 +363,31 @@ function LandingPage() {
                       psychology
                     </span>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-bold uppercase tracking-wider">
+                  <span 
+                    className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-semibold uppercase tracking-wider"
+                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                  >
                     Defeated
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors">
+                <h3 
+                  className="text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors font-medium"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
                   ShadowWire
                 </h3>
-                <p className="text-[10px] font-sans uppercase tracking-widest text-zen-text-sub mb-6">
+                <p 
+                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-sub mb-6"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
                   Bulletproof ZK
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between text-xs font-sans text-zen-text-sub uppercase tracking-wider mb-2">
+                    <div 
+                      className="flex justify-between text-xs text-zen-text-sub uppercase tracking-wider mb-2"
+                      style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                    >
                       <span>Privacy Score</span>
                       <span className="text-red-500 font-bold">0/100</span>
                     </div>
@@ -304,7 +403,8 @@ function LandingPage() {
           <div className="flex justify-center mt-16">
             <Link
               to="/dashboard"
-              className="font-sans text-sm text-zen-text-sub hover:text-zen-indigo transition-colors flex items-center gap-2 group"
+              className="text-sm font-medium text-zen-text-sub hover:text-zen-indigo transition-colors flex items-center gap-2 group"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
             >
               View Full Analysis
               <span className="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">
@@ -315,10 +415,16 @@ function LandingPage() {
         </section>
 
         <footer className="border-t border-zen-text-main/5 py-12 flex flex-col md:flex-row justify-between items-center text-zen-text-sub/50">
-          <p className="font-serif italic text-lg text-zen-text-main/80">
+          <p 
+            className="text-lg text-zen-text-main/80 font-light"
+            style={{ fontFamily: '"Noto Sans", sans-serif' }}
+          >
             Unveil
           </p>
-          <div className="flex gap-8 mt-4 md:mt-0 font-sans text-[10px] uppercase tracking-widest">
+          <div 
+            className="flex gap-8 mt-4 md:mt-0 text-[10px] font-medium uppercase tracking-widest"
+            style={{ fontFamily: '"Noto Sans", sans-serif' }}
+          >
             <a
               href="#"
               className="hover:text-zen-text-main transition-colors"

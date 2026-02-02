@@ -244,19 +244,29 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen text-zen-text-main relative overflow-x-hidden transition-colors duration-500 font-sans">
+    <div className="min-h-screen text-zen-text-main relative overflow-x-hidden transition-colors duration-500" style={{ fontFamily: '"Noto Sans", sans-serif' }}>
+      {/* Translucent blur overlay - creates frosted glass effect over the animated background */}
+      <div 
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{ 
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)'
+        }}
+      ></div>
+      
       <nav className="relative z-50 w-full max-w-7xl mx-auto px-6 md:px-12 py-8 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <Link
             to="/"
-            className="p-2 rounded-full hover:bg-white/20 transition-colors border border-zen-text-main/10 hover:border-zen-indigo/30"
+            className="p-2 rounded-full hover:bg-white/90 transition-colors border border-zen-text-main/10 hover:border-zen-indigo/30"
           >
             <span className="material-symbols-outlined text-zen-text-main">
               arrow_back
             </span>
           </Link>
           <div className="flex flex-col">
-            <h1 className="font-serif italic text-2xl tracking-wide text-zen-text-main">
+            <h1 className="text-2xl tracking-wide text-zen-text-main font-light" style={{ fontFamily: '"Noto Sans", sans-serif' }}>
               Unveil
             </h1>
             <div className="flex items-center gap-2">
@@ -276,13 +286,13 @@ function App() {
           </div>
         </div>
 
-        <div className="hidden md:flex p-1 bg-white/30 rounded-full backdrop-blur-md border border-white/40">
+        <div className="hidden md:flex p-1.5 bg-white rounded-full shadow-lg border border-white/60">
           <button
             onClick={() => setActiveTab("privacy-cash")}
-            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
               activeTab === "privacy-cash"
-                ? "bg-white/60 shadow-sm text-zen-text-main border border-white/60"
-                : "text-zen-text-sub hover:text-zen-text-main"
+                ? "bg-zen-indigo text-white shadow-md"
+                : "text-zen-text-sub hover:text-zen-text-main hover:bg-gray-100"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -290,9 +300,11 @@ function App() {
               {comparison && (
                 <span
                   className={`text-[10px] px-2 py-0.5 rounded-full ${
-                    comparison.privacyCash.privacyScore < 30
-                      ? "bg-red-500/20 text-red-600"
-                      : "bg-orange-500/20 text-orange-600"
+                    activeTab === "privacy-cash"
+                      ? "bg-white/90 text-white"
+                      : comparison.privacyCash.privacyScore < 30
+                        ? "bg-red-500/20 text-red-600"
+                        : "bg-orange-500/20 text-orange-600"
                   }`}
                 >
                   {comparison.privacyCash.privacyScore}/100
@@ -302,27 +314,11 @@ function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab("confidential-transfers")}
-            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
-              activeTab === "confidential-transfers"
-                ? "bg-white/60 shadow-sm text-zen-text-main border border-white/60"
-                : "text-zen-text-sub hover:text-zen-text-main"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <span>Confidential Transfers</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-zen-text-main/10 text-zen-text-sub">
-                Coming Soon
-              </span>
-            </div>
-          </button>
-
-          <button
             onClick={() => setActiveTab("shadowwire")}
-            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
               activeTab === "shadowwire"
-                ? "bg-white/60 shadow-sm text-zen-text-main border border-white/60"
-                : "text-zen-text-sub hover:text-zen-text-main"
+                ? "bg-zen-indigo text-white shadow-md"
+                : "text-zen-text-sub hover:text-zen-text-main hover:bg-gray-100"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -330,11 +326,13 @@ function App() {
               {swAnalysis && (
                 <span
                   className={`text-[10px] px-2 py-0.5 rounded-full ${
-                    swAnalysis.privacyScore < 30
-                      ? "bg-red-500/20 text-red-600"
-                      : swAnalysis.privacyScore < 60
-                        ? "bg-orange-500/20 text-orange-600"
-                        : "bg-green-500/20 text-green-600"
+                    activeTab === "shadowwire"
+                      ? "bg-white/90 text-white"
+                      : swAnalysis.privacyScore < 30
+                        ? "bg-red-500/20 text-red-600"
+                        : swAnalysis.privacyScore < 60
+                          ? "bg-orange-500/20 text-orange-600"
+                          : "bg-green-500/20 text-green-600"
                   }`}
                 >
                   {swAnalysis.privacyScore || 0}/100
@@ -345,10 +343,10 @@ function App() {
 
           <button
             onClick={() => setActiveTab("silentswap")}
-            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
               activeTab === "silentswap"
-                ? "bg-white/60 shadow-sm text-zen-text-main border border-white/60"
-                : "text-zen-text-sub hover:text-zen-text-main"
+                ? "bg-zen-indigo text-white shadow-md"
+                : "text-zen-text-sub hover:text-zen-text-main hover:bg-gray-100"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -356,11 +354,13 @@ function App() {
               {ssAnalysis && (
                 <span
                   className={`text-[10px] px-2 py-0.5 rounded-full ${
-                    ssAnalysis.privacyScore < 30
-                      ? "bg-red-500/20 text-red-600"
-                      : ssAnalysis.privacyScore < 60
-                        ? "bg-orange-500/20 text-orange-600"
-                        : "bg-green-500/20 text-green-600"
+                    activeTab === "silentswap"
+                      ? "bg-white/90 text-white"
+                      : ssAnalysis.privacyScore < 30
+                        ? "bg-red-500/20 text-red-600"
+                        : ssAnalysis.privacyScore < 60
+                          ? "bg-orange-500/20 text-orange-600"
+                          : "bg-green-500/20 text-green-600"
                   }`}
                 >
                   {ssAnalysis.privacyScore || "?"}/100
@@ -370,7 +370,7 @@ function App() {
           </button>
         </div>
 
-        <button className="p-2 rounded-full hover:bg-white/20 transition-colors border border-zen-text-main/10 hover:border-zen-indigo/30">
+        <button className="p-2 rounded-full hover:bg-white/90 transition-colors border border-zen-text-main/10 hover:border-zen-indigo/30">
           <span className="material-symbols-outlined text-zen-text-main">
             settings_suggest
           </span>
@@ -380,7 +380,7 @@ function App() {
       <main className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12 pb-20">
         <section className="mt-16 mb-24">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="font-serif text-5xl md:text-7xl font-light text-zen-text-main leading-tight mb-8 tracking-tight">
+            <h2 className="font-light text-5xl md:text-7xl font-light text-zen-text-main leading-tight mb-8 tracking-tight">
               Privacy{" "}
               <span className="italic text-zen-text-sub/70 font-thin">
                 Measurement
@@ -400,7 +400,7 @@ function App() {
                   savings
                 </span>
               </div>
-              <h3 className="font-serif text-2xl mb-3 text-zen-text-main group-hover:text-zen-indigo transition-colors">
+              <h3 className="font-light text-2xl mb-3 text-zen-text-main group-hover:text-zen-indigo transition-colors">
                 The Promise
               </h3>
               <p className="text-sm text-zen-text-sub leading-relaxed mb-8">
@@ -424,7 +424,7 @@ function App() {
                   visibility
                 </span>
               </div>
-              <h3 className="font-serif text-2xl mb-3 text-zen-text-main group-hover:text-zen-indigo transition-colors">
+              <h3 className="font-light text-2xl mb-3 text-zen-text-main group-hover:text-zen-indigo transition-colors">
                 The Reality
               </h3>
               <p className="text-sm text-zen-text-sub leading-relaxed mb-8">
@@ -447,7 +447,7 @@ function App() {
                   fingerprint
                 </span>
               </div>
-              <h3 className="font-serif text-2xl mb-3 text-zen-text-main group-hover:text-zen-indigo transition-colors">
+              <h3 className="font-light text-2xl mb-3 text-zen-text-main group-hover:text-zen-indigo transition-colors">
                 Unveil's Analysis
               </h3>
               <p className="text-sm text-zen-text-sub leading-relaxed mb-8">
@@ -468,13 +468,13 @@ function App() {
 
           <div className="glass-card p-6 mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-white/30 rounded-lg border border-white/40">
+              <div className="p-2 bg-white rounded-lg border border-white/40">
                 <span className="material-symbols-outlined text-xl text-zen-text-main">
                   compare
                 </span>
               </div>
               <div>
-                <h3 className="font-serif text-xl font-medium text-zen-text-main">
+                <h3 className="font-light text-xl font-medium text-zen-text-main">
                   Protocol Comparison
                 </h3>
                 <p className="text-xs text-zen-text-sub">
@@ -509,7 +509,7 @@ function App() {
                 </thead>
                 <tbody>
                   <tr
-                    className={`border-b border-white/40/50 hover:bg-white/30/30 cursor-pointer transition-colors ${activeTab === "privacy-cash" ? "bg-white/30/40" : ""}`}
+                    className={`border-b border-white/40/50 hover:bg-white/30 cursor-pointer transition-colors ${activeTab === "privacy-cash" ? "bg-white" : ""}`}
                     onClick={() => setActiveTab("privacy-cash")}
                   >
                     <td className="py-4 px-4">
@@ -547,7 +547,7 @@ function App() {
                   </tr>
 
                   <tr
-                    className={`border-b border-white/40/50 hover:bg-white/30/30 cursor-pointer transition-colors ${activeTab === "silentswap" ? "bg-white/30/40" : ""}`}
+                    className={`border-b border-white/40/50 hover:bg-white/30 cursor-pointer transition-colors ${activeTab === "silentswap" ? "bg-white" : ""}`}
                     onClick={() => setActiveTab("silentswap")}
                   >
                     <td className="py-4 px-4">
@@ -585,7 +585,7 @@ function App() {
                   </tr>
 
                   <tr
-                    className={`border-b border-white/40/50 hover:bg-white/30/30 cursor-pointer transition-colors ${activeTab === "shadowwire" ? "bg-white/30/40" : ""}`}
+                    className={`border-b border-white/40/50 hover:bg-white/30 cursor-pointer transition-colors ${activeTab === "shadowwire" ? "bg-white" : ""}`}
                     onClick={() => setActiveTab("shadowwire")}
                   >
                     <td className="py-4 px-4">
@@ -622,7 +622,7 @@ function App() {
                   </tr>
 
                   <tr
-                    className={`border-b border-white/40/50 hover:bg-white/30/30 cursor-pointer transition-colors opacity-50 ${activeTab === "confidential-transfers" ? "bg-white/30/40" : ""}`}
+                    className={`border-b border-white/40/50 hover:bg-white/30 cursor-pointer transition-colors opacity-50 ${activeTab === "confidential-transfers" ? "bg-white" : ""}`}
                     onClick={() => setActiveTab("confidential-transfers")}
                   >
                     <td className="py-4 px-4">
@@ -674,7 +674,7 @@ function App() {
           <>
             <section className="mb-12">
               <div className="flex items-center justify-between mb-8">
-                <h3 className="font-serif text-2xl text-zen-text-main">
+                <h3 className="font-light text-2xl text-zen-text-main">
                   Live Benchmark
                 </h3>
                 <div className="flex items-center gap-2 text-xs text-zen-text-sub font-mono uppercase tracking-wider">
@@ -688,7 +688,7 @@ function App() {
                   <span className="text-xs uppercase tracking-wide text-zen-text-sub font-medium mb-3">
                     Pool Liquidity
                   </span>
-                  <div className="text-3xl font-serif font-medium text-zen-text-main mt-auto tracking-tight">
+                  <div className="text-3xl font-light font-medium text-zen-text-main mt-auto tracking-tight">
                     {((stats?.tvl || 0) / 1e9).toFixed(2)}{" "}
                     <span className="text-lg text-zen-text-sub">SOL</span>
                   </div>
@@ -698,11 +698,11 @@ function App() {
                 </div>
 
                 <div className="glass-card p-6 rounded-xl flex flex-col relative overflow-hidden">
-                  <div className="absolute right-0 top-0 w-16 h-16 bg-white/30/20 rounded-bl-3xl"></div>
+                  <div className="absolute right-0 top-0 w-16 h-16 bg-white/90 rounded-bl-3xl"></div>
                   <span className="text-xs uppercase tracking-wide text-zen-text-sub font-medium mb-3">
                     Privacy Score
                   </span>
-                  <div className="text-3xl font-serif font-medium text-zen-text-sub mt-auto tracking-tight">
+                  <div className="text-3xl font-light font-medium text-zen-text-sub mt-auto tracking-tight">
                     {metrics?.privacyScore || 0}
                     <span className="text-xl text-zen-text-sub">/100</span>
                   </div>
@@ -715,7 +715,7 @@ function App() {
                   <span className="text-xs uppercase tracking-wide text-zen-text-sub font-medium mb-3">
                     Anonymity Set
                   </span>
-                  <div className="text-3xl font-serif font-medium text-zen-text-main mt-auto tracking-tight">
+                  <div className="text-3xl font-light font-medium text-zen-text-main mt-auto tracking-tight">
                     {metrics?.avgAnonymitySet?.toFixed(1) || "0"}
                   </div>
                   <span className="text-xs text-zen-text-sub mt-2 font-mono">
@@ -727,7 +727,7 @@ function App() {
                   <span className="text-xs uppercase tracking-wide text-zen-text-sub font-medium mb-3">
                     Linkable Transactions
                   </span>
-                  <div className="text-3xl font-serif font-medium text-zen-text-main mt-auto tracking-tight">
+                  <div className="text-3xl font-light font-medium text-zen-text-main mt-auto tracking-tight">
                     {matches.length > 0 ? `${matches.length}` : "0"}
                   </div>
                   <span className="text-xs text-zen-text-sub mt-2 font-mono">
@@ -738,15 +738,15 @@ function App() {
             </section>
 
             <section className="glass-card p-1 rounded-2xl mb-12 shadow-lg">
-              <div className="bg-white/30/40 rounded-xl p-8 md:p-12 border border-white/40 backdrop-blur-sm">
+              <div className="bg-white rounded-xl p-8 md:p-12 border border-white/40 backdrop-blur-sm">
                 <div className="flex items-start gap-5 mb-10">
-                  <div className="p-3 bg-white/30 rounded-lg text-zen-text-sub border border-white/40">
+                  <div className="p-3 bg-white rounded-lg text-zen-text-sub border border-white/40">
                     <span className="material-symbols-outlined text-2xl">
                       timeline
                     </span>
                   </div>
                   <div>
-                    <h3 className="font-serif text-2xl font-medium text-zen-text-main mb-2">
+                    <h3 className="font-light text-2xl font-medium text-zen-text-main mb-2">
                       Transaction Analysis
                     </h3>
                     <p className="text-zen-text-sub opacity-70 text-sm max-w-2xl leading-relaxed">
@@ -770,10 +770,10 @@ function App() {
                     placeholder="Search by transaction signature or wallet address..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-12 py-4 bg-white/30/60 border border-white/40 rounded-xl text-zen-text-main placeholder-coolGrey-400 focus:ring-1 focus:ring-coolGrey-300 focus:border-coolGrey-400 focus:bg-white transition-all shadow-sm"
+                    className="w-full pl-12 pr-12 py-4 bg-white/60 border border-white/40 rounded-xl text-zen-text-main placeholder-coolGrey-400 focus:ring-1 focus:ring-coolGrey-300 focus:border-coolGrey-400 focus:bg-white transition-all shadow-sm"
                   />
                   <div className="absolute inset-y-0 right-3 flex items-center">
-                    <button className="p-2 bg-transparent rounded-lg hover:bg-white/30 transition-colors border border-transparent hover:border-white/40">
+                    <button className="p-2 bg-transparent rounded-lg hover:bg-white transition-colors border border-transparent hover:border-white/40">
                       <span className="material-symbols-outlined text-zen-text-sub text-lg">
                         arrow_forward
                       </span>
@@ -795,11 +795,11 @@ function App() {
                 )}
 
                 {matchesLoading ? (
-                  <div className="text-center py-16 border-t border-dashed border-white/50 bg-white/30/20 rounded-b-lg">
+                  <div className="text-center py-16 border-t border-dashed border-white/50 bg-white/90 rounded-b-lg">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-700 mx-auto"></div>
                   </div>
                 ) : matches.length === 0 ? (
-                  <div className="text-center py-16 border-t border-dashed border-white/50 bg-white/30/20 rounded-b-lg">
+                  <div className="text-center py-16 border-t border-dashed border-white/50 bg-white/90 rounded-b-lg">
                     <span className="material-symbols-outlined text-4xl text-coolGrey-300 mb-3 block">
                       privacy_tip
                     </span>
@@ -816,7 +816,7 @@ function App() {
                     {matches.map((match) => (
                       <div
                         key={match.withdrawal.signature}
-                        className="p-6 hover:bg-white/30/30 transition-colors"
+                        className="p-6 hover:bg-white/30 transition-colors"
                       >
                         <div className="glass-card border-l-4 border-l-coolGrey-400 rounded-lg p-4 mb-4">
                           <div className="flex items-center gap-2 mb-3">
@@ -898,7 +898,7 @@ function App() {
                             onClick={() =>
                               toggleMatch(match.withdrawal.signature)
                             }
-                            className="w-full flex items-center justify-between gap-2 p-3 bg-white/20/30 hover:bg-white/20/50 rounded-lg border border-white/40 transition-colors"
+                            className="w-full flex items-center justify-between gap-2 p-3 bg-white/90/30 hover:bg-white/90/50 rounded-lg border border-white/40 transition-colors"
                           >
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-bold text-green-300">
@@ -976,7 +976,7 @@ function App() {
                                                 {percentage}% probability
                                               </span>
                                             </div>
-                                            <div className="w-full bg-white/30 rounded-full h-2">
+                                            <div className="w-full bg-white rounded-full h-2">
                                               <div
                                                 className={`h-2 rounded-full ${
                                                   parseFloat(percentage) > 50
@@ -1169,7 +1169,7 @@ function App() {
                   <span className="material-symbols-outlined text-zen-text-sub">
                     lock_open
                   </span>
-                  <span className="text-2xl font-serif font-bold text-zen-text-main">
+                  <span className="text-2xl font-light font-bold text-zen-text-main">
                     {
                       matches.filter((m) => m.vulnerabilityLevel === "critical")
                         .length
@@ -1189,7 +1189,7 @@ function App() {
                   <span className="material-symbols-outlined text-zen-text-sub/70">
                     groups
                   </span>
-                  <span className="text-2xl font-serif font-bold text-zen-text-main">
+                  <span className="text-2xl font-light font-bold text-zen-text-main">
                     {
                       matches.filter((m) => m.vulnerabilityLevel === "high")
                         .length
@@ -1209,7 +1209,7 @@ function App() {
                   <span className="material-symbols-outlined text-zen-text-sub">
                     query_stats
                   </span>
-                  <span className="text-2xl font-serif font-bold text-zen-text-main">
+                  <span className="text-2xl font-light font-bold text-zen-text-main">
                     {matches.length}
                   </span>
                 </div>
@@ -1244,7 +1244,7 @@ function App() {
                     (Token-2022), using ElGamal encryption to hide transfer
                     amounts.
                   </p>
-                  <div className="bg-white/20/50 rounded-lg p-4 text-left">
+                  <div className="bg-white/90/50 rounded-lg p-4 text-left">
                     <div className="text-zen-text-sub font-semibold mb-2">
                       Why Coming Soon?
                     </div>
@@ -1267,7 +1267,7 @@ function App() {
               </div>
             </div>
 
-            <div className="bg-white/30/30 border border-white/40 rounded-xl p-6">
+            <div className="bg-white/30 border border-white/40 rounded-xl p-6">
               <h3 className="font-semibold text-zen-text-main mb-4 flex items-center gap-2">
                 <span className="material-symbols-outlined text-blue-400">
                   analytics
@@ -1313,7 +1313,7 @@ function App() {
                   <strong className="text-green-300">ShadowWire</strong> is a
                   Bulletproof-based privacy protocol ($15K hackathon bounty).
                 </p>
-                <div className="bg-white/20/50 rounded-lg p-4 my-3">
+                <div className="bg-white/90/50 rounded-lg p-4 my-3">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <div className="text-red-400 font-semibold mb-2">
@@ -1479,7 +1479,7 @@ function App() {
                   </tbody>
                 </table>
               </div>
-              <div className="mt-4 bg-white/20/50 rounded-lg p-4 text-xs text-zen-text-sub">
+              <div className="mt-4 bg-white/90/50 rounded-lg p-4 text-xs text-zen-text-sub">
                 <strong className="text-red-300">Key Insight:</strong>{" "}
                 ShadowWire scores 0/100 on our privacy benchmark. It reveals
                 both addresses (87.5% exposed) AND amounts (46% extracted via balance analysis).
@@ -1493,7 +1493,7 @@ function App() {
             {swAnalysis && swAnalysis.totalTransfers > 0 ? (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                  <div className="bg-white/30/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
                     <div className="text-zen-text-sub text-sm mb-1">
                       Privacy Score
                     </div>
@@ -1510,7 +1510,7 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="bg-white/30/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
                     <div className="text-zen-text-sub text-sm mb-1">
                       Total Transfers
                     </div>
@@ -1519,7 +1519,7 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="bg-white/30/50 backdrop-blur-sm rounded-xl p-6 border border-red-500/50 border-2">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-red-500/50 border-2">
                     <div className="text-zen-text-sub text-sm mb-1">
                       Address Exposure
                     </div>
@@ -1529,7 +1529,7 @@ function App() {
                     <div className="text-xs text-zen-text-sub/70">addresses visible</div>
                   </div>
 
-                  <div className="bg-white/30/50 backdrop-blur-sm rounded-xl p-6 border border-red-500/50 border-2">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-red-500/50 border-2">
                     <div className="text-zen-text-sub text-sm mb-1">
                       Amount Exposure
                     </div>
@@ -1539,7 +1539,7 @@ function App() {
                     <div className="text-xs text-zen-text-sub/70">amounts extracted</div>
                   </div>
 
-                  <div className="bg-white/30/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
                     <div className="text-zen-text-sub text-sm mb-1">
                       Linkability Rate
                     </div>
@@ -1548,7 +1548,7 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="bg-white/30/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-white/40">
                     <div className="text-zen-text-sub text-sm mb-1">
                       Timing Correlations
                     </div>
@@ -1564,7 +1564,7 @@ function App() {
                     Amount Extraction Analysis
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div className="bg-white/20/50 rounded-lg p-4">
+                    <div className="bg-white/90/50 rounded-lg p-4">
                       <div className="text-zen-text-sub text-sm mb-1">
                         Detection Success Rate
                       </div>
@@ -1591,7 +1591,7 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="bg-white/20/50 rounded-lg p-4">
+                    <div className="bg-white/90/50 rounded-lg p-4">
                       <div className="text-zen-text-sub text-sm mb-1">
                         Total Value Observable
                       </div>
@@ -1615,7 +1615,7 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="bg-white/20/50 rounded-lg p-4">
+                    <div className="bg-white/90/50 rounded-lg p-4">
                       <div className="text-zen-text-sub text-sm mb-1">
                         Largest Detected Transfer
                       </div>
@@ -1639,7 +1639,7 @@ function App() {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-white/20/50 rounded-lg p-4 text-sm text-zen-text-sub">
+                  <div className="bg-white/90/50 rounded-lg p-4 text-sm text-zen-text-sub">
                     <strong className="text-red-300">Analysis method:</strong>{" "}
                     While Bulletproofs cryptographically hide amounts in
                     zero-knowledge proofs, blockchain balance changes
@@ -1700,30 +1700,30 @@ function App() {
                       Timing Correlation Attack Results
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                      <div className="bg-white/20/50 rounded-lg p-4">
+                      <div className="bg-white/90/50 rounded-lg p-4">
                         <div className="text-zen-text-sub text-sm mb-1">Potential Links Found</div>
                         <div className="text-2xl font-bold text-orange-400">
                           {swAnalysis.timingCorrelations.uniqueLinks}
                         </div>
                       </div>
-                      <div className="bg-white/20/50 rounded-lg p-4">
+                      <div className="bg-white/90/50 rounded-lg p-4">
                         <div className="text-zen-text-sub text-sm mb-1">High Confidence Matches</div>
                         <div className="text-2xl font-bold text-red-400">
                           {swAnalysis.timingCorrelations.highConfidenceMatches}
                         </div>
                       </div>
-                      <div className="bg-white/20/50 rounded-lg p-4">
+                      <div className="bg-white/90/50 rounded-lg p-4">
                         <div className="text-zen-text-sub text-sm mb-1">Total Correlations</div>
                         <div className="text-2xl font-bold text-yellow-400">
                           {swAnalysis.timingCorrelations.totalMatches}
                         </div>
                       </div>
                     </div>
-                    <div className="bg-white/20/50 rounded-lg p-4">
+                    <div className="bg-white/90/50 rounded-lg p-4">
                       <div className="text-sm font-semibold text-zen-text-main mb-3">Top Timing Matches (Deposit → Withdrawal)</div>
                       <div className="space-y-2 max-h-64 overflow-y-auto">
                         {swAnalysis.timingCorrelations.matches?.slice(0, 10).map((match: any, idx: number) => (
-                          <div key={idx} className="flex items-center gap-2 text-xs bg-white/30/50 rounded p-2">
+                          <div key={idx} className="flex items-center gap-2 text-xs bg-white/50 rounded p-2">
                             <span className="text-orange-400 font-mono">{idx + 1}.</span>
                             <span className="text-zen-text-sub">Deposit from</span>
                             <span className="text-red-300 font-mono truncate max-w-[120px]" title={match.depositSender}>
@@ -1756,7 +1756,7 @@ function App() {
                     <h3 className="text-lg font-bold text-zen-text-main mb-4">
                       Address Reuse Analysis
                     </h3>
-                    <div className="bg-white/20/50 rounded-lg p-4">
+                    <div className="bg-white/90/50 rounded-lg p-4">
                       <div className="text-sm text-zen-text-sub mb-3">
                         <strong className="text-purple-300">{swAnalysis.addressReuse.totalReusedAddresses} addresses</strong> used multiple times,
                         making them easily trackable across transactions.
@@ -1783,7 +1783,7 @@ function App() {
                   </div>
                 )}
 
-                <div className="bg-white/30/50 backdrop-blur-sm rounded-xl border border-white/40">
+                <div className="bg-white/50 backdrop-blur-sm rounded-xl border border-white/40">
                   <div className="p-6 border-b border-white/40">
                     <h2 className="text-xl font-semibold text-zen-text-main mb-2">
                       Bulletproof Limitation: Addresses AND Amounts Observable
@@ -1818,7 +1818,7 @@ function App() {
                       {swTransfers.map((transfer: any) => (
                         <div
                           key={transfer.signature}
-                          className="p-6 hover:bg-white/30/30 transition-colors"
+                          className="p-6 hover:bg-white/30 transition-colors"
                         >
                           <div className="bg-green-500/5 border border-green-500/20 rounded-lg p-4">
                             <div className="flex items-center gap-2 mb-3">
@@ -1844,7 +1844,7 @@ function App() {
                             </div>
 
                             <div className="grid grid-cols-1 gap-4 text-sm">
-                              <div className="bg-white/20/30 rounded-lg p-3">
+                              <div className="bg-white/90/30 rounded-lg p-3">
                                 {isPoolAddress(transfer.sender) ? (
                                   <>
                                     <div className="text-zen-text-sub/70 text-xs mb-1">
@@ -1878,7 +1878,7 @@ function App() {
                                 )}
                               </div>
 
-                              <div className="bg-white/20/30 rounded-lg p-3">
+                              <div className="bg-white/90/30 rounded-lg p-3">
                                 {isPoolAddress(transfer.recipient) ? (
                                   <>
                                     <div className="text-zen-text-sub/70 text-xs mb-1">
@@ -2005,7 +2005,7 @@ function App() {
                 <p className="text-zen-text-sub mb-4">
                   ShadowWire is a new protocol. Run the indexer to fetch data:
                 </p>
-                <code className="bg-white/20 text-green-400 px-4 py-2 rounded text-sm">
+                <code className="bg-white/90 text-green-400 px-4 py-2 rounded text-sm">
                   npx tsx index-shadowwire.ts
                 </code>
                 <p className="text-zen-text-sub text-sm mt-4">
@@ -2032,7 +2032,7 @@ function App() {
                   cross-chain routing service ($5K bounty) that obscures
                   transaction paths through Secret Network.
                 </p>
-                <div className="bg-white/20/50 rounded-lg p-4 my-3">
+                <div className="bg-white/90/50 rounded-lg p-4 my-3">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <div className="text-orange-400 font-semibold mb-2">
@@ -2071,7 +2071,7 @@ function App() {
             {ssAnalysis ? (
               <>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                  <div className="bg-white/30/40 border border-white/40 rounded-xl p-4">
+                  <div className="bg-white border border-white/40 rounded-xl p-4">
                     <div className="text-zen-text-sub text-xs uppercase tracking-wider mb-1">
                       Privacy Score
                     </div>
@@ -2087,7 +2087,7 @@ function App() {
                       {ssAnalysis.privacyScore}/100
                     </div>
                   </div>
-                  <div className="bg-white/30/40 border border-white/40 rounded-xl p-4">
+                  <div className="bg-white border border-white/40 rounded-xl p-4">
                     <div className="text-zen-text-sub text-xs uppercase tracking-wider mb-1">
                       Total Inputs
                     </div>
@@ -2095,7 +2095,7 @@ function App() {
                       {ssAnalysis.totalInputs || 0}
                     </div>
                   </div>
-                  <div className="bg-white/30/40 border border-white/40 rounded-xl p-4">
+                  <div className="bg-white border border-white/40 rounded-xl p-4">
                     <div className="text-zen-text-sub text-xs uppercase tracking-wider mb-1">
                       Total Outputs
                     </div>
@@ -2103,7 +2103,7 @@ function App() {
                       {ssAnalysis.totalOutputs || 0}
                     </div>
                   </div>
-                  <div className="bg-white/30/40 border border-white/40 rounded-xl p-4">
+                  <div className="bg-white border border-white/40 rounded-xl p-4">
                     <div className="text-zen-text-sub text-xs uppercase tracking-wider mb-1">
                       Linkability Rate
                     </div>
@@ -2116,7 +2116,7 @@ function App() {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-white/30/30 border border-white/40 rounded-xl p-5">
+                  <div className="bg-white/30 border border-white/40 rounded-xl p-5">
                     <h3 className="font-semibold text-zen-text-main mb-4 flex items-center gap-2">
                       <span className="material-symbols-outlined text-orange-400">
                         schedule
@@ -2151,7 +2151,7 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="bg-white/30/30 border border-white/40 rounded-xl p-5">
+                  <div className="bg-white/30 border border-white/40 rounded-xl p-5">
                     <h3 className="font-semibold text-zen-text-main mb-4 flex items-center gap-2">
                       <span className="material-symbols-outlined text-amber-400">
                         attach_money
@@ -2210,7 +2210,7 @@ function App() {
                     <p className="text-zen-text-sub mt-3">Loading matches...</p>
                   </div>
                 ) : ssMatches.length > 0 ? (
-                  <div className="bg-white/30/30 border border-white/40 rounded-xl p-5">
+                  <div className="bg-white/30 border border-white/40 rounded-xl p-5">
                     <h3 className="font-semibold text-zen-text-main mb-4 flex items-center gap-2">
                       <span className="material-symbols-outlined text-orange-400">
                         link
@@ -2241,7 +2241,7 @@ function App() {
                         ) => (
                           <div
                             key={i}
-                            className="bg-white/20/50 rounded-lg p-4 border border-white/40/50"
+                            className="bg-white/90/50 rounded-lg p-4 border border-white/40/50"
                           >
                             <div className="flex items-center justify-between mb-2">
                               <span
@@ -2307,14 +2307,14 @@ function App() {
                 )}
               </>
             ) : (
-              <div className="bg-white/30/30 border border-white/40 rounded-xl p-6 text-center">
+              <div className="bg-white/30 border border-white/40 rounded-xl p-6 text-center">
                 <h3 className="text-lg font-semibold text-zen-text-main mb-3">
                   Run the SilentSwap Indexer
                 </h3>
                 <p className="text-zen-text-sub mb-4">
                   SilentSwap analysis requires indexing on-chain data first:
                 </p>
-                <code className="bg-white/20 text-orange-400 px-4 py-2 rounded text-sm">
+                <code className="bg-white/90 text-orange-400 px-4 py-2 rounded text-sm">
                   npx tsx src/indexer/silentswap.ts && npx tsx
                   src/analysis/silentswap-attack.ts
                 </code>
@@ -2330,13 +2330,13 @@ function App() {
         <section id="methodology" className="mt-24 mb-12">
           <div className="glass-card p-8 md:p-12 rounded-2xl">
             <div className="flex items-center gap-3 mb-8">
-              <div className="p-3 bg-white/30 rounded-lg border border-white/40">
+              <div className="p-3 bg-white rounded-lg border border-white/40">
                 <span className="material-symbols-outlined text-2xl text-zen-text-sub">
                   science
                 </span>
               </div>
               <div>
-                <h2 className="font-serif text-2xl font-medium text-zen-text-main">
+                <h2 className="font-light text-2xl font-medium text-zen-text-main">
                   Methodology
                 </h2>
                 <p className="text-sm text-zen-text-sub">
@@ -2347,7 +2347,7 @@ function App() {
 
             <div className="grid md:grid-cols-2 gap-8 mb-10">
               <div>
-                <h3 className="font-serif text-lg font-medium text-zen-text-main mb-3 flex items-center gap-2">
+                <h3 className="font-light text-lg font-medium text-zen-text-main mb-3 flex items-center gap-2">
                   <span className="material-symbols-outlined text-zen-text-sub">
                     schedule
                   </span>
@@ -2363,7 +2363,7 @@ function App() {
               </div>
 
               <div>
-                <h3 className="font-serif text-lg font-medium text-zen-text-main mb-3 flex items-center gap-2">
+                <h3 className="font-light text-lg font-medium text-zen-text-main mb-3 flex items-center gap-2">
                   <span className="material-symbols-outlined text-zen-text-sub">
                     analytics
                   </span>
@@ -2380,7 +2380,7 @@ function App() {
               </div>
             </div>
 
-            <div className="bg-white/30/50 rounded-xl p-6 mb-8 border border-white/40">
+            <div className="bg-white/50 rounded-xl p-6 mb-8 border border-white/40">
               <h4 className="text-sm font-medium text-zen-text-sub mb-4 uppercase tracking-wider">
                 Attack Visualization
               </h4>
@@ -2415,7 +2415,7 @@ function App() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white/30/30 rounded-lg p-4 border border-white/40/50">
+              <div className="bg-white/30 rounded-lg p-4 border border-white/40/50">
                 <h4 className="font-medium text-zen-text-main mb-2 text-sm">
                   Linkability Rate
                 </h4>
@@ -2424,7 +2424,7 @@ function App() {
                   with high confidence. Lower is better for privacy.
                 </p>
               </div>
-              <div className="bg-white/30/30 rounded-lg p-4 border border-white/40/50">
+              <div className="bg-white/30 rounded-lg p-4 border border-white/40/50">
                 <h4 className="font-medium text-zen-text-main mb-2 text-sm">
                   Anonymity Set
                 </h4>
@@ -2434,7 +2434,7 @@ function App() {
                   anonymity set of 1 means the link is certain.
                 </p>
               </div>
-              <div className="bg-white/30/30 rounded-lg p-4 border border-white/40/50">
+              <div className="bg-white/30 rounded-lg p-4 border border-white/40/50">
                 <h4 className="font-medium text-zen-text-main mb-2 text-sm">
                   Timing Resistance
                 </h4>
@@ -2476,9 +2476,9 @@ function App() {
         </section>
       </main>
 
-      <footer className="relative z-10 w-full bg-white/30/30 backdrop-blur-lg border-t border-white/40 py-12 mt-12">
+      <footer className="relative z-10 w-full bg-white/30 backdrop-blur-lg border-t border-white/40 py-12 mt-12">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/30/60 border border-white/40 text-xs text-zen-text-sub mb-8 font-mono">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-white/40 text-xs text-zen-text-sub mb-8 font-mono">
             <span className="material-symbols-outlined text-sm">
               verified_user
             </span>
