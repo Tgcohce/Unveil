@@ -56,22 +56,28 @@ export class SilentSwapAttack {
       `\nAnalyzing ${inputs.length} inputs and ${outputs.length} outputs...`,
     );
 
-    // 1. Run timing + amount correlation attack
-    const matches = this.correlationAttack(inputs, outputs);
+    // 1. Run round-trip wallet detection (most reliable attack)
+    const roundTripMatches = this.detectRoundTripWallets(inputs, outputs);
 
-    // 2. Analyze timing patterns
-    const timingMetrics = this.analyzeTimingPatterns(matches);
+    // 2. Run timing + amount correlation attack
+    const correlationMatches = this.correlationAttack(inputs, outputs);
 
-    // 3. Analyze amount patterns
-    const amountMetrics = this.analyzeAmountPatterns(matches);
+    // Combine matches (round-trip takes priority)
+    const matches = [...roundTripMatches, ...correlationMatches];
 
-    // 4. Detect multi-output fingerprints
+    // 3. Analyze timing patterns
+    const timingMetrics = this.analyzeTimingPatterns(correlationMatches);
+
+    // 4. Analyze amount patterns
+    const amountMetrics = this.analyzeAmountPatterns(correlationMatches);
+
+    // 5. Detect multi-output fingerprints
     const fingerprintMetrics = this.detectMultiOutputFingerprints(
       inputs,
       outputs,
     );
 
-    // 5. Calculate privacy score
+    // 6. Calculate privacy score (based on round-trip exposure primarily)
     const privacyScore = this.calculatePrivacyScore(
       matches.length,
       inputs.length,
@@ -81,12 +87,13 @@ export class SilentSwapAttack {
       fingerprintMetrics,
     );
 
-    // 6. Identify vulnerabilities
+    // 7. Identify vulnerabilities
     const { vulnerabilities, recommendations } = this.identifyVulnerabilities(
       matches,
       timingMetrics,
       amountMetrics,
       fingerprintMetrics,
+      roundTripMatches.length,
     );
 
     const linkabilityRate =
@@ -132,6 +139,48 @@ export class SilentSwapAttack {
   }
 
   /**
+   * Detect round-trip wallets - wallets that appear as both input source AND output destination
+   * This is the most reliable deanonymization method for SilentSwap
+   */
+  private detectRoundTripWallets(
+    inputs: SilentSwapInput[],
+    outputs: SilentSwapOutput[],
+  ): SilentSwapMatch[] {
+    const matches: SilentSwapMatch[] = [];
+
+    // Get unique input wallets and output destinations
+    const inputWallets = new Set(inputs.map((i) => i.userWallet).filter(Boolean));
+    const outputWallets = new Set(outputs.map((o) => o.destinationWallet).filter(Boolean));
+
+    // Find wallets that appear in both sets (round-trip users)
+    const roundTripWallets = [...inputWallets].filter((w) => outputWallets.has(w));
+
+    for (const wallet of roundTripWallets) {
+      const inputTx = inputs.find((i) => i.userWallet === wallet);
+      const outputTx = outputs.find((o) => o.destinationWallet === wallet);
+
+      if (inputTx && outputTx) {
+        matches.push({
+          inputId: inputTx.id || 0,
+          outputId: outputTx.id || 0,
+          input: inputTx,
+          output: outputTx,
+          confidence: 95, // High confidence - same wallet in both directions
+          timeDeltaSeconds: Math.abs(outputTx.timestamp - inputTx.timestamp) / 1000,
+          amountRatio: outputTx.amount / inputTx.amount,
+          matchReasons: [
+            "Round-trip wallet: same address appears as input source AND output destination",
+            "This reveals the wallet owner uses SilentSwap for both sending and receiving",
+          ],
+        });
+      }
+    }
+
+    console.log(`Found ${matches.length} round-trip wallet exposures`);
+    return matches;
+  }
+
+  /**
    * Timing + Amount Correlation Attack
    *
    * For each input, find potential matching outputs based on:
@@ -168,10 +217,22 @@ export class SilentSwapAttack {
         const timeDelta = output.timestamp - input.timestamp;
         const amountRatio = output.amount / input.amount;
         const expectedRatio = 1 - SILENTSWAP_PARAMS.expectedFeeRate; // 0.99
+        const feeRate = 1 - amountRatio; // e.g., 0.01 for 1% fee
+
+        // STRICT FEE VALIDATION: Only consider matches where fee is 0-5%
+        // If output > input (negative fee) or fee > 5%, this is NOT a valid match
+        if (feeRate < 0 || feeRate > 0.05) {
+          return {
+            output,
+            timeDelta,
+            amountRatio,
+            score: 0, // Invalid - disqualify
+          };
+        }
 
         // How close is the ratio to expected?
         const ratioDeviation = Math.abs(amountRatio - expectedRatio);
-        const amountScore = Math.max(0, 1 - ratioDeviation / 0.05); // Penalize deviation
+        const amountScore = Math.max(0, 1 - ratioDeviation / 0.02); // Stricter: 2% tolerance
 
         // Timing score (closer to typical = higher score)
         const timingDeviation = Math.abs(
@@ -182,8 +243,8 @@ export class SilentSwapAttack {
           1 - timingDeviation / SILENTSWAP_PARAMS.maxTimeDelta,
         );
 
-        // Combined score
-        const totalScore = amountScore * 0.6 + timingScore * 0.4;
+        // Combined score - amount is more important for correlation
+        const totalScore = amountScore * 0.7 + timingScore * 0.3;
 
         return {
           output,
@@ -196,7 +257,8 @@ export class SilentSwapAttack {
       // Sort by score and take the best match
       scoredCandidates.sort((a, b) => b.score - a.score);
 
-      if (scoredCandidates.length > 0 && scoredCandidates[0].score > 0.3) {
+      // STRICT: Only accept high-confidence matches (score > 0.6 means fee within ~1%)
+      if (scoredCandidates.length > 0 && scoredCandidates[0].score > 0.6) {
         const best = scoredCandidates[0];
         const matchReasons: string[] = [];
 
@@ -408,18 +470,23 @@ export class SilentSwapAttack {
     const linkabilityRate = inputCount > 0 ? matchedCount / inputCount : 0;
     score -= linkabilityRate * 40;
 
-    // Timing entropy penalty (0-20 points)
-    score -= (1 - timingMetrics.entropy) * 20;
+    // Only apply timing/amount penalties if we actually found matches
+    // If no matches found, that means the protocol IS working - don't penalize
+    if (matchedCount > 0) {
+      // Timing entropy penalty (0-20 points)
+      score -= (1 - timingMetrics.entropy) * 20;
 
-    // Timing exploitability penalty (0-10 points)
-    if (timingMetrics.exploitable) {
-      score -= 10;
+      // Timing exploitability penalty (0-10 points)
+      if (timingMetrics.exploitable) {
+        score -= 10;
+      }
+
+      // Amount correlation penalty (0-20 points)
+      score -= amountMetrics.correlationStrength * 20;
     }
 
-    // Amount correlation penalty (0-20 points)
-    score -= amountMetrics.correlationStrength * 20;
-
-    // Multi-output fingerprinting penalty (0-10 points)
+    // Multi-output fingerprinting penalty still applies (0-10 points)
+    // This is a theoretical risk even without confirmed correlations
     score -= (fingerprintMetrics.fingerprintableRate / 100) * 10;
 
     return Math.max(0, Math.round(score));
@@ -444,9 +511,20 @@ export class SilentSwapAttack {
       multiOutputCount: number;
       fingerprintableRate: number;
     },
+    roundTripCount: number = 0,
   ) {
     const vulnerabilities: string[] = [];
     const recommendations: string[] = [];
+
+    // Round-trip wallet vulnerability (most critical for SilentSwap)
+    if (roundTripCount > 0) {
+      vulnerabilities.push(
+        `MEDIUM: ${roundTripCount} wallets exposed via round-trip usage (same wallet sends AND receives)`,
+      );
+      recommendations.push(
+        `Use separate wallets for sending and receiving to avoid round-trip exposure.`,
+      );
+    }
 
     // Timing vulnerabilities
     if (timingMetrics.exploitable) {

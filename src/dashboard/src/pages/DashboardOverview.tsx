@@ -181,7 +181,7 @@ export function DashboardOverview() {
                 </td>
                 <td className="py-4 px-6 text-right">
                   <span className="text-orange-600 font-medium">
-                    {ssAnalysis?.linkabilityRate ? `${Math.round(ssAnalysis.linkabilityRate * 100)}%` : "18%"}
+                    {ssAnalysis?.linkabilityRate ? `${Math.round(ssAnalysis.linkabilityRate * 100)}%` : "10%"}
                   </span>
                 </td>
                 <td className="py-4 px-6 text-center">
@@ -207,7 +207,7 @@ export function DashboardOverview() {
                 </td>
                 <td className="py-4 px-6 text-right">
                   <span className="text-red-600 font-medium">
-                    {swAnalysis?.linkabilityRate ? `${Math.round(swAnalysis.linkabilityRate)}%` : "91%"}
+                    {swAnalysis?.linkabilityRate ? `${Math.round(swAnalysis.linkabilityRate * 100)}%` : "46%"}
                   </span>
                 </td>
                 <td className="py-4 px-6 text-center">
@@ -258,7 +258,7 @@ export function DashboardOverview() {
         >
           <div className="flex items-center justify-between mb-4">
             <span className="material-symbols-outlined text-2xl text-zen-text-main group-hover:text-zen-indigo transition-colors">lock_open</span>
-            <span className="text-2xl font-light text-red-600">{comparison?.privacyCash?.privacyScore || 16}/100</span>
+            <span className="text-2xl font-light text-red-600">{comparison?.privacyCash?.privacyScore || 5}/100</span>
           </div>
           <h4 className="text-lg font-medium text-zen-text-main mb-1 group-hover:text-zen-indigo transition-colors">Privacy Cash</h4>
           <p className="text-sm text-zen-text-sub">ZK Mixing Protocol · Timing Attack Vulnerable</p>
@@ -273,7 +273,7 @@ export function DashboardOverview() {
         >
           <div className="flex items-center justify-between mb-4">
             <span className="material-symbols-outlined text-2xl text-zen-text-main group-hover:text-zen-indigo transition-colors">psychology</span>
-            <span className="text-2xl font-light text-red-600">{swAnalysis?.privacyScore || 0}/100</span>
+            <span className="text-2xl font-light text-orange-600">{swAnalysis?.privacyScore || 47}/100</span>
           </div>
           <h4 className="text-lg font-medium text-zen-text-main mb-1 group-hover:text-zen-indigo transition-colors">ShadowWire</h4>
           <p className="text-sm text-zen-text-sub">Bulletproof ZK · Amount Correlation Broken</p>
@@ -288,7 +288,7 @@ export function DashboardOverview() {
         >
           <div className="flex items-center justify-between mb-4">
             <span className="material-symbols-outlined text-2xl text-zen-text-main group-hover:text-zen-indigo transition-colors">swap_horiz</span>
-            <span className="text-2xl font-light text-orange-600">{ssAnalysis?.privacyScore || 18}/100</span>
+            <span className="text-2xl font-light text-green-600">{ssAnalysis?.privacyScore || 67}/100</span>
           </div>
           <h4 className="text-lg font-medium text-zen-text-main mb-1 group-hover:text-zen-indigo transition-colors">SilentSwap</h4>
           <p className="text-sm text-zen-text-sub">TEE Relay · Graph Analysis Possible</p>

@@ -489,3 +489,45 @@ export class ShadowWireIndexer {
     return Array.from(users);
   }
 }
+
+// CLI entry point
+if (require.main === module) {
+  const heliusApiKey = process.env.HELIUS_API_KEY;
+  if (!heliusApiKey) {
+    console.error("HELIUS_API_KEY environment variable required");
+    process.exit(1);
+  }
+
+  const indexer = new ShadowWireIndexer(heliusApiKey);
+
+  indexer.fetchTransfers(1000).then(async (transfers) => {
+    console.log("\n=== ShadowWire Indexing Results ===");
+    console.log(`Total Transfers: ${transfers.length}`);
+
+    if (transfers.length > 0) {
+      console.log("\nSample Transfer:");
+      console.log(JSON.stringify(transfers[0], null, 2));
+    }
+
+    // Save to database
+    if (transfers.length > 0) {
+      const { UnveilDatabase } = await import("./db");
+      const dbPath = process.env.DATABASE_PATH || "./data/unveil.db";
+      const db = new UnveilDatabase(dbPath);
+
+      console.log("\nSaving to database...");
+      db.insertShadowWireTransfers(transfers);
+      console.log(`Saved ${transfers.length} transfers to database`);
+
+      // Aggregate and save accounts
+      const accounts = await indexer.aggregateAccounts(transfers);
+      for (const account of accounts.values()) {
+        db.upsertShadowWireAccount(account);
+      }
+      console.log(`Saved ${accounts.size} accounts to database`);
+
+      db.close();
+      console.log("Database saved successfully!");
+    }
+  });
+}

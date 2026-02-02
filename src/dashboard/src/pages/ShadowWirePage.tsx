@@ -174,7 +174,7 @@ export function ShadowWirePage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-zen-text-sub">Linkability</span>
-                <span className="text-zen-text-main">{Math.round(swAnalysis?.linkabilityRate || 91)}%</span>
+                <span className="text-zen-text-main">{Math.round((swAnalysis?.linkabilityRate || 0.46) * 100)}%</span>
               </div>
             </div>
           </div>

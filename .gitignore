@@ -41,7 +41,5 @@ coverage/
 temp/
 tmp/
 
-# Documentation (markdown files)
-*.md
-
+# Vercel
 .vercel
