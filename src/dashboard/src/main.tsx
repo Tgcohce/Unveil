@@ -3,7 +3,10 @@ import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./LandingPage";
-import Dashboard from "./Dashboard";
+import { DashboardOverview } from "./pages/DashboardOverview";
+import { PrivacyCashPage } from "./pages/PrivacyCashPage";
+import { ShadowWirePage } from "./pages/ShadowWirePage";
+import { SilentSwapPage } from "./pages/SilentSwapPage";
 import UnicornBackground from "./components/UnicornBackground";
 import "./index.css";
 
@@ -101,7 +104,10 @@ if (rootElement) {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<DashboardOverview />} />
+              <Route path="/dashboard/privacy-cash" element={<PrivacyCashPage />} />
+              <Route path="/dashboard/shadowwire" element={<ShadowWirePage />} />
+              <Route path="/dashboard/silentswap" element={<SilentSwapPage />} />
             </Routes>
           </BrowserRouter>
         </QueryClientProvider>

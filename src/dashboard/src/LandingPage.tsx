@@ -40,11 +40,11 @@ function LandingPage() {
         <div className="flex items-center gap-10">
           <div className="hidden md:flex gap-8">
             <a
-              href="#features"
+              href="#methodology"
               className="text-[11px] font-semibold tracking-[0.15em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
               style={{ fontFamily: '"Noto Sans", sans-serif' }}
             >
-              Features
+              Methodology
             </a>
             <a
               href="#protocols"
@@ -52,6 +52,13 @@ function LandingPage() {
               style={{ fontFamily: '"Noto Sans", sans-serif' }}
             >
               Protocols
+            </a>
+            <a
+              href="#findings"
+              className="text-[11px] font-semibold tracking-[0.15em] uppercase text-zen-text-sub hover:text-zen-indigo transition-colors"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
+              Findings
             </a>
           </div>
           <Link
@@ -83,13 +90,13 @@ function LandingPage() {
               </div>
               
               <h1 
-                className="font-light text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-zen-text-main tracking-tight leading-[1] mb-8"
+                className="font-light text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-zen-text-main tracking-tight leading-[1.1] mb-8"
                 style={{ fontFamily: '"Noto Sans", sans-serif' }}
               >
-                Architectural
+                <span className="text-zen-indigo/70">Solana</span> <span className="font-extralight">Timing</span>
                 <br />
-                <span className="text-zen-indigo/70 font-extralight">
-                  Silence
+                <span className="font-extralight">
+                  Correlation Benchmark
                 </span>
               </h1>
               
@@ -97,8 +104,8 @@ function LandingPage() {
                 className="text-zen-text-sub max-w-md leading-relaxed text-base mb-10 opacity-80"
                 style={{ fontFamily: '"Noto Sans", sans-serif' }}
               >
-                We quantify the invisible. A living audit of on-chain anonymity
-                designed for the profound observer.
+                Privacy protocols hide who sends what to whom — but they can't hide when. 
+                UNVEIL matches timestamps to measure how effectively each protocol breaks the link.
               </p>
 
               <div className="flex items-center gap-6">
@@ -119,7 +126,7 @@ function LandingPage() {
                 </Link>
                 
                 <a
-                  href="#features"
+                  href="#methodology"
                   className="group flex items-center gap-2 text-zen-text-sub hover:text-zen-text-main transition-colors"
                 >
                   <span 
@@ -142,7 +149,7 @@ function LandingPage() {
                 <div className="w-px h-10 bg-zen-text-main/10"></div>
                 <div>
                   <div className="text-3xl font-light text-zen-text-main" style={{ fontFamily: '"Noto Sans", sans-serif' }}>100%</div>
-                  <div className="text-[10px] uppercase tracking-wider text-zen-text-sub mt-1">On-chain Data</div>
+                  <div className="text-[10px] uppercase tracking-wider text-zen-text-sub mt-1">Mainnet Data</div>
                 </div>
                 <div className="w-px h-10 bg-zen-text-main/10"></div>
                 <div>
@@ -181,110 +188,123 @@ function LandingPage() {
           </div>
         </section>
 
+        {/* Methodology Section - Bento Grid */}
         <section
-          id="features"
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 relative z-20 pb-32 mt-24 lg:mt-32"
+          id="methodology"
+          className="relative z-20 pb-32 mt-24 lg:mt-32"
         >
-          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[400px] group animate-fade-in stagger-1">
-            <div className="flex-grow">
-              <div className="icon-container mb-8">
-                <span className="material-symbols-outlined">query_stats</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6">
+            {/* Large card - How It Works (left) */}
+            <article className="glass-card p-8 lg:p-10 flex flex-col group animate-fade-in md:row-span-2">
+              <div className="flex-grow flex flex-col justify-center">
+                <div className="icon-container mb-8">
+                  <span className="material-symbols-outlined">schedule</span>
+                </div>
+                <h3 
+                  className="text-4xl lg:text-5xl text-zen-text-main mb-6 group-hover:text-zen-indigo transition-colors duration-500 font-light"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  How It Works
+                </h3>
+                <p 
+                  className="text-sm text-zen-text-sub leading-relaxed mb-4"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  When a user deposits into a privacy pool and later withdraws, both events 
+                  are publicly visible on-chain. If a withdrawal happens shortly after a deposit 
+                  of a similar amount, they're likely the same user.
+                </p>
+                <p 
+                  className="text-sm text-zen-text-sub leading-relaxed"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  UNVEIL scans every deposit-withdrawal pair across each protocol, scores them 
+                  by time proximity and amount similarity, and calculates how many transactions 
+                  can be linked back to their origin.
+                </p>
               </div>
-              <h3 
-                className="text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500 font-light"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                Profound Insights
-              </h3>
-              <p 
-                className="text-sm text-zen-text-sub leading-relaxed"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                The Living Audit. Continuous privacy health monitoring
-                interpreted through architectural clarity. We transform raw data
-                into a narrative of digital hygiene.
-              </p>
-            </div>
-            <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-              <span 
-                className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                Explore Audit
-              </span>
-              <span className="material-symbols-outlined text-sm">
-                arrow_forward
-              </span>
-            </div>
-          </article>
+              <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity mt-auto">
+                <span 
+                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  Timing Correlation
+                </span>
+                <span className="material-symbols-outlined text-sm">
+                  arrow_forward
+                </span>
+              </div>
+            </article>
 
-          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[400px] group animate-fade-in stagger-2">
-            <div className="flex-grow">
-              <div className="icon-container mb-8">
-                <span className="material-symbols-outlined">grain</span>
+            {/* Top right card - Linkability Rate */}
+            <article className="glass-card p-6 lg:p-8 flex flex-col group animate-fade-in stagger-1">
+              <div className="flex-grow">
+                <div className="icon-container mb-4 w-10 h-10">
+                  <span className="material-symbols-outlined text-lg">percent</span>
+                </div>
+                <h3 
+                  className="text-2xl text-zen-text-main mb-3 group-hover:text-zen-indigo transition-colors duration-500 font-light"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  Linkability Rate
+                </h3>
+                <p 
+                  className="text-sm text-zen-text-sub leading-relaxed"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  The percentage of transactions where a deposit can be matched to its 
+                  withdrawal with high confidence. Higher means less private.
+                </p>
               </div>
-              <h3 
-                className="text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500 font-light"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                Visual Topology
-              </h3>
-              <p 
-                className="text-sm text-zen-text-sub leading-relaxed"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                Particle Cloud technology visualizes transaction pools as
-                organic matter. Witness probabilistic linkages form and dissolve
-                in the ether of the blockchain.
-              </p>
-            </div>
-            <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-              <span 
-                className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                View Topology
-              </span>
-              <span className="material-symbols-outlined text-sm">
-                arrow_forward
-              </span>
-            </div>
-          </article>
+              <div className="pt-4 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity mt-auto">
+                <span 
+                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  Key Metric
+                </span>
+                <span className="material-symbols-outlined text-sm">
+                  arrow_forward
+                </span>
+              </div>
+            </article>
 
-          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[400px] group animate-fade-in stagger-3">
-            <div className="flex-grow">
-              <div className="icon-container mb-8">
-                <span className="material-symbols-outlined">graphic_eq</span>
+            {/* Bottom right card - Anonymity Set */}
+            <article className="glass-card p-6 lg:p-8 flex flex-col group animate-fade-in stagger-2">
+              <div className="flex-grow">
+                <div className="icon-container mb-4 w-10 h-10">
+                  <span className="material-symbols-outlined text-lg">groups</span>
+                </div>
+                <h3 
+                  className="text-2xl text-zen-text-main mb-3 group-hover:text-zen-indigo transition-colors duration-500 font-light"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  Anonymity Set
+                </h3>
+                <p 
+                  className="text-sm text-zen-text-sub leading-relaxed"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  The number of possible senders a withdrawal could have come from. 
+                  Larger is better — a set of 1 means the sender is fully exposed.
+                </p>
               </div>
-              <h3 
-                className="text-3xl text-zen-text-main mb-4 group-hover:text-zen-indigo transition-colors duration-500 font-light"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                Real-time Resonance
-              </h3>
-              <p 
-                className="text-sm text-zen-text-sub leading-relaxed"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                Direct on-chain telemetry offering instant feedback loops.
-                Detect exposure vectors and correlation events the moment they
-                ripple through the Solana mainnet.
-              </p>
-            </div>
-            <div className="pt-6 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-              <span 
-                className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
-                style={{ fontFamily: '"Noto Sans", sans-serif' }}
-              >
-                Live Telemetry
-              </span>
-              <span className="material-symbols-outlined text-sm">
-                arrow_forward
-              </span>
-            </div>
-          </article>
+              <div className="pt-4 border-t border-zen-text-main/5 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity mt-auto">
+                <span 
+                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-main"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  Privacy Measure
+                </span>
+                <span className="material-symbols-outlined text-sm">
+                  arrow_forward
+                </span>
+              </div>
+            </article>
+          </div>
         </section>
 
+        {/* Protocols Section */}
         <section id="protocols" className="py-24 border-t border-zen-text-main/5">
           <div className="mb-16 animate-fade-in">
             <h3 
@@ -298,12 +318,13 @@ function LandingPage() {
               className="text-base text-zen-text-sub leading-relaxed opacity-80 max-w-lg"
               style={{ fontFamily: '"Noto Sans", sans-serif' }}
             >
-              Real-world privacy analysis on Solana mainnet. We measure what matters: timing correlation, amount linkability, and anonymity set degradation.
+              Real mainnet transaction data from Privacy Cash, SilentSwap, and ShadowWire. 
+              All data indexed from Solana mainnet via Helius RPC through January 2026.
             </p>
           </div>
 
           <div className="space-y-4">
-            <div className="group cursor-pointer">
+            <Link to="/dashboard/privacy-cash" className="group cursor-pointer block">
               <div className="flex items-center justify-between py-6 border-b border-zen-text-main/10 hover:border-zen-indigo/30 transition-colors">
                 <div className="flex items-center gap-8">
                   <div className="w-16 h-16 rounded-full bg-zen-text-main/5 flex items-center justify-center group-hover:bg-zen-indigo/10 transition-colors">
@@ -318,25 +339,27 @@ function LandingPage() {
                         Privacy Cash
                       </h4>
                       <span className="px-2 py-0.5 rounded-full bg-zen-text-main/10 text-zen-text-sub text-[9px] font-bold uppercase tracking-wider">
-                        Vulnerable
+                        ZK Merkle Pool
                       </span>
                     </div>
-                    <p className="text-sm text-zen-text-sub">ZK Mixing Protocol · Timing Attack Susceptible</p>
+                    <p className="text-sm text-zen-text-sub max-w-md">
+                      Users deposit SOL into a shielded pool backed by a Merkle tree. Small anonymity set and predictable deposit amounts make timing correlation straightforward.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-12">
                   <div className="text-right hidden md:block">
-                    <div className="text-2xl font-light text-zen-text-main">16<span className="text-sm text-zen-text-sub">/100</span></div>
-                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Privacy Score</div>
+                    <div className="text-2xl font-light text-zen-text-main">68%<span className="text-sm text-zen-text-sub ml-1">linkable</span></div>
+                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Linkability Rate</div>
                   </div>
                   <span className="material-symbols-outlined text-zen-text-sub group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
                     arrow_forward
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="group cursor-pointer">
+            <Link to="/dashboard/shadowwire" className="group cursor-pointer block">
               <div className="flex items-center justify-between py-6 border-b border-zen-text-main/10 hover:border-zen-indigo/30 transition-colors">
                 <div className="flex items-center gap-8">
                   <div className="w-16 h-16 rounded-full bg-zen-text-main/5 flex items-center justify-center group-hover:bg-zen-indigo/10 transition-colors">
@@ -351,25 +374,27 @@ function LandingPage() {
                         ShadowWire
                       </h4>
                       <span className="px-2 py-0.5 rounded-full bg-zen-text-main/10 text-zen-text-sub text-[9px] font-bold uppercase tracking-wider">
-                        Defeated
+                        Bulletproofs
                       </span>
                     </div>
-                    <p className="text-sm text-zen-text-sub">Bulletproof ZK · Amount Correlation Broken</p>
+                    <p className="text-sm text-zen-text-sub max-w-md">
+                      Uses Bulletproof range proofs to hide transfer amounts on-chain. While amounts are concealed, transaction timing and participant addresses remain visible.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-12">
                   <div className="text-right hidden md:block">
-                    <div className="text-2xl font-light text-zen-text-main">0<span className="text-sm text-zen-text-sub">/100</span></div>
-                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Privacy Score</div>
+                    <div className="text-2xl font-light text-zen-text-main">91%<span className="text-sm text-zen-text-sub ml-1">linkable</span></div>
+                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Linkability Rate</div>
                   </div>
                   <span className="material-symbols-outlined text-zen-text-sub group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
                     arrow_forward
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="group cursor-pointer">
+            <Link to="/dashboard/silentswap" className="group cursor-pointer block">
               <div className="flex items-center justify-between py-6 border-b border-zen-text-main/10 hover:border-zen-indigo/30 transition-colors">
                 <div className="flex items-center gap-8">
                   <div className="w-16 h-16 rounded-full bg-zen-text-main/5 flex items-center justify-center group-hover:bg-zen-indigo/10 transition-colors">
@@ -384,23 +409,25 @@ function LandingPage() {
                         SilentSwap
                       </h4>
                       <span className="px-2 py-0.5 rounded-full bg-zen-text-main/10 text-zen-text-sub text-[9px] font-bold uppercase tracking-wider">
-                        Limited
+                        Cross-chain TEE
                       </span>
                     </div>
-                    <p className="text-sm text-zen-text-sub">TEE Relay · Graph Analysis Possible</p>
+                    <p className="text-sm text-zen-text-sub max-w-md">
+                      Routes transactions through shielded paths across multiple blockchains using a TEE-based relay. Cross-chain hops introduce natural timing noise.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-12">
                   <div className="text-right hidden md:block">
-                    <div className="text-2xl font-light text-zen-text-main">18<span className="text-sm text-zen-text-sub">/100</span></div>
-                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Privacy Score</div>
+                    <div className="text-2xl font-light text-zen-text-main">18%<span className="text-sm text-zen-text-sub ml-1">linkable</span></div>
+                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Linkability Rate</div>
                   </div>
                   <span className="material-symbols-outlined text-zen-text-sub group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
                     arrow_forward
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
 
           <div className="flex items-center gap-6 mt-12 group/btn cursor-pointer w-fit">
@@ -421,13 +448,81 @@ function LandingPage() {
           </div>
         </section>
 
+        {/* Findings Section */}
+        <section id="findings" className="py-24 border-t border-zen-text-main/5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div>
+              <h3 
+                className="text-4xl md:text-5xl text-zen-text-main leading-[1] tracking-tight mb-8"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                Key<br/>
+                <span className="text-zen-indigo/70 font-light">Findings</span>
+              </h3>
+              <p 
+                className="text-base text-zen-text-sub leading-relaxed mb-5"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                Privacy Cash: ~68% linkability — two-thirds of deposits matched via timing heuristics.
+              </p>
+              <p 
+                className="text-base text-zen-text-sub leading-relaxed mb-5"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                SilentSwap: ~18% linkability — cross-chain routing adds timing noise.
+              </p>
+              <p 
+                className="text-base text-zen-text-sub leading-relaxed"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                ShadowWire: Hides amounts but not timing, leaving it vulnerable.
+              </p>
+            </div>
+            <div className="glass-card p-8 lg:p-10">
+              <h4 
+                className="text-xl font-medium text-zen-text-main mb-6"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                Why This Matters
+              </h4>
+              <p 
+                className="text-sm text-zen-text-sub leading-relaxed mb-5"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                ZK proofs guarantee unlinkability within the proof system — but metadata leaks outside it.
+              </p>
+              <p 
+                className="text-sm text-zen-text-sub leading-relaxed mb-5"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                Timestamps and amounts are publicly visible. Predictable user behavior breaks privacy.
+              </p>
+              <p 
+                className="text-sm text-zen-text-main leading-relaxed font-medium"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                Not a cryptography flaw — a human behavior flaw.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <footer className="border-t border-zen-text-main/5 py-12 flex flex-col md:flex-row justify-between items-center text-zen-text-sub/50">
-          <p 
-            className="text-lg text-zen-text-main/80 font-light"
-            style={{ fontFamily: '"Noto Sans", sans-serif' }}
-          >
-            Unveil
-          </p>
+          <div>
+            <p 
+              className="text-lg text-zen-text-main/80 font-light mb-2"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
+              Unveil
+            </p>
+            <p 
+              className="text-xs text-zen-text-sub max-w-sm"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
+              Built for Privacy Hack 2026. Open-source security research — not financial advice. 
+              The goal is to improve privacy for everyone on Solana.
+            </p>
+          </div>
           <div 
             className="flex gap-8 mt-4 md:mt-0 text-[10px] font-medium uppercase tracking-widest"
             style={{ fontFamily: '"Noto Sans", sans-serif' }}
@@ -450,7 +545,7 @@ function LandingPage() {
               rel="noopener noreferrer"
               className="hover:text-zen-text-main transition-colors"
             >
-              Documentation
+              GitHub
             </a>
           </div>
         </footer>
