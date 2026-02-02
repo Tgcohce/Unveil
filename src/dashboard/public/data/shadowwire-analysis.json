@@ -1,0 +1,28 @@
+{
+  "protocol": "ShadowWire",
+  "programId": "ApfNmzrNXLUQ5yWpQVmrCB4MNsaRqjsFrLXViBq2rBU",
+  "privacyScore": 47,
+  "totalTransfers": 80,
+  "visibleAddressLinks": 37,
+  "linkabilityRate": 0.4625,
+  "analysisMethod": "Direct on-chain inspection - addresses are plaintext visible",
+  "attackType": "No attack needed - addresses visible",
+  "findings": [
+    "37 transfers have BOTH sender AND recipient addresses visible on-chain",
+    "Bulletproofs successfully hide amounts but provide zero address privacy",
+    "Transaction graph is fully analyzable",
+    "53.7% of transfers have partial or full address exposure"
+  ],
+  "vulnerabilities": [
+    "CRITICAL: Sender and recipient addresses visible in 46.3% of transfers",
+    "CRITICAL: Bulletproofs only hide amounts - transaction graph exposed",
+    "HIGH: Address clustering trivial with visible addresses"
+  ],
+  "recommendations": [
+    "ShadowWire should NOT be used when address privacy is required",
+    "Bulletproofs alone are insufficient - need stealth addresses",
+    "Consider SilentSwap or Privacy Cash for address privacy"
+  ],
+  "visibleTransferLinks": 37,
+  "analysisTimestamp": "2026-02-02T02:16:16.725Z"
+}

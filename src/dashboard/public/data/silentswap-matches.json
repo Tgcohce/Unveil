@@ -1,0 +1,104 @@
+{
+  "matches": [
+    {
+      "type": "round_trip_wallet",
+      "wallet": "6mT2vqKCeeL13JnCxWpsPAf7VKrs4SoiMME9aa2q1UaD",
+      "inputSignature": "5aXqVSJK4o5xezeRJme5yYURBsQr2fCuDBficdKGXX2rvvtVE5pTV7ukTL62Wta8d7TxR6WSfGCWELZA9ouoEnSi",
+      "outputSignature": "25hU196XwMW2GMYqZ39nf4Rr7kEwJuKxWuwMKmaLw6hCduMP75iaxe8PjjNTGXodC4g7n4b384KRiKXXat7DTAcA",
+      "inputAmount": 1624877,
+      "outputAmount": 4859000,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "EeNGKEDD9rKpnB7tPty6FWcBbr8oxuKkm687WEUWBjPE",
+      "inputSignature": "5PBM8Jhq3gLzJJK3PM2Rsj1TbVVsimnKdqhJPMfWQzLoDkWMUc2rx2ynQtexiF6PRQt8T4tumP7pwpbevR3jLxJa",
+      "outputSignature": "5nXS6j5yGpG1vqE2UcxZShZ2bG8EKjrWcpAnLRQYSnLmCNt2TGRagoHeVwY4jDRwoxeiYbRWt9jBTxiWgFV8mUwn",
+      "inputAmount": 210388547,
+      "outputAmount": 50005600,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "8jnHDbqFgxX4TuNjnKKEfS1XVXVgvEBHn7aSXnyLJWJd",
+      "inputSignature": "5Lc7nA2yAD5nUVAadNMWWd2fEt5SDAmdMtnDGHk6ngVrMMtScfDJjXEwWymST769a1fun952GFLx9KwCMWTjrzUQ",
+      "outputSignature": "6gLRPir1MWSkNfzmGee4ppzpWcFM5ovba12vcxrrZrZbycX8PVxQR8hJHV5trwtHtfHG39USum7gyZ5K7G2MJaY",
+      "inputAmount": 195797860,
+      "outputAmount": 50005600,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "4WT13woewtY1zHjuUHF92vmBm9jiDG6Kgg51AphuUuL5",
+      "inputSignature": "4YtQNE7BwrmaJRZbJUQgHhBAtizqychrGSq8zhp3sfFLSjCWwpwDfjSNHsxZVTj87Rk5asd6nuLyuvgFfpHQxdKW",
+      "outputSignature": "Y8QjbtuZHAXkghPp3SEJN6W7wfF8WNUzqYU1nGqRV2K4HZSsThhJfsJqrkVh6zusNnwknpc5k47GdYJopFNfEiq",
+      "inputAmount": 204862392,
+      "outputAmount": 50015000,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "2BQr4SPDy3nNHEmQdR7rPLqUyz32V8ZDPM9umMhFYS1e",
+      "inputSignature": "46uGjrFM1egiG3vJW8dM5XjCCsQTYnZuCNS2c2nTJoLNrk5LasjXED7pXFtuFZ7Vxf5yUskipfHgLuHFZzZaBFvq",
+      "outputSignature": "2HTKqPoFPmvbjGi7ZZ7ffBQfzdDBqDp5UkPAbAejkMqEGeuMYPsp25EPk6jJ82uLNo4EXC1xNnxnQSNyXHUMgB7F",
+      "inputAmount": 4887408,
+      "outputAmount": 2154280,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "4B52kjPqCjWL9pUnQoRsoPESH2oY4b4En1f9S4HhpnJC",
+      "inputSignature": "2KQU4LPLdeaf14exVZDDPP3oUjd5UoyVUUzPXB28eZM4waiFkLCduDzG87pDtBJ4x8VmqjVKQCELxExC6teypKdY",
+      "outputSignature": "xwaMw6yGpVzk9g6t89hJ2VzBceFQgRXDhnBu7ZG1YWKtYbjx2uT6FgvSWpPQ42siFnYFVcXhzBSmuP8Lxq7zwbx",
+      "inputAmount": 6735795,
+      "outputAmount": 5088914,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "CFTetosKXWP1jXaPpAhcM1fccPFiJySwyi2uqUhq1xTV",
+      "inputSignature": "2QaC1L9VaD56tjUJd1Eb9TaHbNLrsKsEttVH7hR2cfzfExy9jpbJiXecmfUyxKwFdELJfwU8pR59giVjHErkWDFM",
+      "outputSignature": "cGQA5XaS2EeEQZoZzLn947DDoyqyPYT1vkrgbuLZEQrxHMsgVAfi9Pycy5NrKK5WudJuRvgweK3KMWGfQa91qFu",
+      "inputAmount": 3737200,
+      "outputAmount": 3202200,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "H4RS4tPLXGhig8ws5ELyrAEpNwdcCVWiu63GXSJ848Xf",
+      "inputSignature": "5epAUiaTww63ZuZfxfKJoj8k2Scuy4RFnK5owKqwYBR5VGMsiV6YvCoZGKNaJhgehkQbTBJJVwfduvWkCb9hULRm",
+      "outputSignature": "4WNtinLC2Tj6TfhKsBaKYCMe1ZeYb8DDbMdFRX8QZrLh4LD4bi94etAtijg8B4ARSRcxZb359171W23V5tLVKXRt",
+      "inputAmount": 4795586,
+      "outputAmount": 3384125,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "HwCMos4BMh98J68Rr9iSVBY6xUMyZCgHMMAvnNsP5yHE",
+      "inputSignature": "35cnWLML9TTr4YeBU9eyEfC5GJ9xeZjzF2ic5M1NZCV8XhLCMR3au3Tscou8q6ioFHob7qWZBgc7ggrHp9XVNdRz",
+      "outputSignature": "3fFoif2o4LWVo7zynCNPRWNQhgHBkVq4nrPZheX5CpZTALrAKVxFDuwZmrnSMARs4peN4kLgEMt8dCjqyLLdNSBU",
+      "inputAmount": 2370437,
+      "outputAmount": 5196040,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    },
+    {
+      "type": "round_trip_wallet",
+      "wallet": "AZ7hAQN3T8RvXJe8vHQNtEsZ65AxunceJfkCMD7BDdmk",
+      "inputSignature": "28NvgHtDwZRVAWRrMEZGQkBkYanbijKBxEj3kyJ3nXy2ZBj9v7M66Qp5feVHXdPsDfWHN6u67z4hKCN393S8Uxee",
+      "outputSignature": "3yBbV88vwD2WVyMsbdUweCifoqhmD15YA4BzMJhdsNXxEdVaP4xtkJBP6HPY5HsvBQDgWhGYjY6FgkWBfsqe9WDj",
+      "inputAmount": 3088776,
+      "outputAmount": 3105624,
+      "confidence": 95,
+      "reason": "Same wallet appears as both input source and output destination"
+    }
+  ]
+}

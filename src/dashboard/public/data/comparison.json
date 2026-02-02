@@ -1,0 +1,61 @@
+{
+  "privacyCash": {
+    "protocol": "Privacy Cash",
+    "privacyScore": 5,
+    "totalDeposits": 180,
+    "totalWithdrawals": 232,
+    "confirmedDeanonymizations": 95,
+    "linkabilityRate": 0.409,
+    "avgAnonymitySet": 2.13,
+    "hidesAmounts": false,
+    "hidesAddresses": true,
+    "usesZKProofs": true,
+    "zkProofType": "Groth16",
+    "attackMethods": [
+      "Timing + Amount correlation (76 matches)",
+      "Address reuse (19 matches)"
+    ],
+    "keyVulnerability": "Amounts visible on-chain enable correlation attacks. 40.9% of withdrawals linked to deposits."
+  },
+  "shadowWire": {
+    "protocol": "ShadowWire",
+    "privacyScore": 47,
+    "totalTransfers": 80,
+    "visibleAddressLinks": 37,
+    "linkabilityRate": 0.4625,
+    "hidesAmounts": true,
+    "hidesAddresses": false,
+    "usesZKProofs": true,
+    "zkProofType": "Bulletproofs",
+    "attackMethods": [
+      "Direct on-chain address visibility"
+    ],
+    "keyVulnerability": "Bulletproofs hide amounts but addresses are plaintext visible. 46.3% have both sender and recipient exposed."
+  },
+  "silentSwap": {
+    "protocol": "SilentSwap",
+    "privacyScore": 67,
+    "totalInputs": 104,
+    "totalOutputs": 74,
+    "confirmedDeanonymizations": 10,
+    "linkabilityRate": 0.096,
+    "hidesAmounts": false,
+    "hidesAddresses": true,
+    "usesZKProofs": false,
+    "zkProofType": "Cross-chain (Secret Network)",
+    "attackMethods": [
+      "Round-trip wallet exposure (10 wallets)"
+    ],
+    "keyVulnerability": "Wallets that both send and receive through SilentSwap are linkable. 9.6% exposure rate."
+  },
+  "summary": {
+    "winner": "SilentSwap",
+    "totalDeanonymizations": {
+      "privacyCash": 95,
+      "shadowWire": 37,
+      "silentSwap": 10
+    },
+    "recommendation": "SilentSwap provides the best privacy (90 score, 9.6% linkable) via cross-chain routing. Privacy Cash (59 score, 40.9% linkable) and ShadowWire (54 score, 46.3% linkable) both have significant vulnerabilities - amounts and addresses respectively.",
+    "methodology": "Analysis based on on-chain data. Privacy Cash attacked via timing+amount correlation. ShadowWire addresses directly visible. SilentSwap attacked via round-trip wallet detection."
+  }
+}

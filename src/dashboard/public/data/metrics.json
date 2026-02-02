@@ -1,0 +1,20 @@
+{
+  "protocol": "Privacy Cash",
+  "programId": "9fhQBbumKEFuXtMBDw8AaQyAjCorLGJQiS3skWZdQyQD",
+  "tvl": 2607311893178,
+  "totalDeposits": 180,
+  "totalWithdrawals": 232,
+  "confirmedDeanonymizations": 95,
+  "linkabilityRate": 0.409,
+  "uniqueDepositors": 129,
+  "avgAnonymitySet": 2.13,
+  "medianAnonymitySet": 2,
+  "minAnonymitySet": 1,
+  "attackMethods": [
+    "Timing correlation",
+    "Amount matching",
+    "Address reuse"
+  ],
+  "privacyScore": 5,
+  "lastUpdated": "2026-02-02T02:16:16.726Z"
+}

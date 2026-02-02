@@ -1,0 +1,28 @@
+{
+  "protocol": "SilentSwap",
+  "relayAddress": "CbKGgVKLJFb8bBrf58DnAkdryX6ubewVytn7X957YwNr",
+  "privacyScore": 67,
+  "totalInputs": 104,
+  "totalOutputs": 74,
+  "confirmedMatches": 10,
+  "linkabilityRate": 0.096,
+  "analysisMethod": "Round-trip wallet detection - wallets appearing as both input source and output destination",
+  "attackType": "Wallet graph analysis",
+  "findings": [
+    "10 wallets identified that BOTH sent to AND received from SilentSwap",
+    "These round-trip users have their privacy compromised",
+    "Cross-chain routing prevents timing+amount correlation",
+    "90.4% of inputs remain unlinked"
+  ],
+  "vulnerabilities": [
+    "MEDIUM: Round-trip users expose themselves (10 wallets, 9.6%)",
+    "LOW: Multi-input aggregation patterns detectable",
+    "INFO: Cross-chain timing still observable but not exploitable without amount correlation"
+  ],
+  "recommendations": [
+    "Use separate wallets for input and output",
+    "Avoid round-trip usage patterns",
+    "SilentSwap provides strong privacy for single-direction flows"
+  ],
+  "analysisTimestamp": "2026-02-02T02:16:16.715Z"
+}
