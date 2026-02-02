@@ -99,7 +99,7 @@ export function ParticleSphere() {
       const targetZ = origZ + repelZ
 
       
-      const lerpFactor = 0.12
+      const lerpFactor = 0.08
       posArray[i3] += (targetX - posArray[i3]) * lerpFactor
       posArray[i3 + 1] += (targetY - posArray[i3 + 1]) * lerpFactor
       posArray[i3 + 2] += (targetZ - posArray[i3 + 2]) * lerpFactor
@@ -107,8 +107,8 @@ export function ParticleSphere() {
     
     positionAttribute.needsUpdate = true
     
-    pointsRef.current.rotation.y = time * 0.15
-    pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.1
+    pointsRef.current.rotation.y = time * 0.08
+    pointsRef.current.rotation.x = Math.sin(time * 0.05) * 0.05
   })
   
   return (

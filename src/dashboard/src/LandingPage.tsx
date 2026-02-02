@@ -69,71 +69,109 @@ function LandingPage() {
       </nav>
 
       <main className="relative z-10 flex-grow flex flex-col w-full max-w-[1400px] mx-auto pt-32 px-6 md:px-12">
-        <section className="min-h-[85vh] flex flex-col items-center justify-center relative pb-20">
-          <div className="text-center relative z-20 mb-8 animate-fade-in select-none">
-            <h2 
-              className="text-zen-indigo text-xs font-semibold tracking-[0.3em] uppercase mb-6 opacity-90"
-              style={{ fontFamily: '"Noto Sans", sans-serif' }}
-            >
-              Solana Privacy Benchmark
-            </h2>
-            <h1 
-              className="font-light text-6xl md:text-8xl lg:text-9xl text-zen-text-main tracking-tighter leading-[0.9] mb-8"
-              style={{ fontFamily: '"Noto Sans", sans-serif' }}
-            >
-              Architectural
-              <br />
-              <span className="text-zen-text-sub/70 font-thin">
-                Silence
-              </span>
-            </h1>
-            <p 
-              className="text-zen-text-sub max-w-md mx-auto leading-7 text-sm opacity-70 tracking-wide"
-              style={{ fontFamily: '"Noto Sans", sans-serif' }}
-            >
-              We quantify the invisible. A living audit of on-chain anonymity
-              designed for the profound observer.
-            </p>
-          </div>
-
-          <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center select-none my-[-20px] z-30">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-              <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full orbital-line animate-spin-slow"></div>
-              <div className="w-[320px] h-[320px] md:w-[480px] md:h-[480px] rounded-full orbital-line animate-spin-reverse-slow border-dashed"></div>
-            </div>
-
-            <div className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] relative z-10">
-              <Suspense fallback={
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="w-32 h-32 rounded-full bg-zen-indigo/10 animate-pulse"></div>
-                </div>
-              }>
-                <ParticleSphereScene />
-              </Suspense>
-            </div>
-          </div>
-
-          <div className="mt-8 z-20">
-            <Link
-              to="/dashboard"
-              className="group relative px-10 py-4 overflow-hidden rounded-full border border-zen-text-main/10 
-                       transition-all duration-500 hover:border-zen-indigo/30 bg-white/30 backdrop-blur-md inline-flex items-center gap-3"
-            >
-              <span 
-                className="relative z-10 text-sm font-medium tracking-wide text-zen-text-main group-hover:text-zen-indigo transition-colors"
+        <section className="min-h-[90vh] flex items-center justify-center relative">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div className="relative z-20 animate-fade-in select-none order-2 lg:order-1">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-2 h-2 bg-zen-indigo rounded-full"></div>
+                <span 
+                  className="text-zen-indigo text-[10px] font-semibold tracking-[0.25em] uppercase"
+                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                >
+                  Solana Privacy Benchmark
+                </span>
+              </div>
+              
+              <h1 
+                className="font-light text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-zen-text-main tracking-tight leading-[1] mb-8"
                 style={{ fontFamily: '"Noto Sans", sans-serif' }}
               >
-                View Live Dashboard
-              </span>
-              <span className="material-symbols-outlined text-lg text-zen-text-main group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
-                arrow_forward
-              </span>
-              <div className="absolute inset-0 bg-zen-indigo/5 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
-            </Link>
+                Architectural
+                <br />
+                <span className="text-zen-indigo/70 font-extralight">
+                  Silence
+                </span>
+              </h1>
+              
+              <p 
+                className="text-zen-text-sub max-w-md leading-relaxed text-base mb-10 opacity-80"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                We quantify the invisible. A living audit of on-chain anonymity
+                designed for the profound observer.
+              </p>
+
+              <div className="flex items-center gap-6">
+                <Link
+                  to="/dashboard"
+                  className="group relative px-8 py-4 overflow-hidden rounded-full border-2 border-zen-text-main 
+                           bg-transparent transition-all duration-300 hover:bg-zen-text-main inline-flex items-center gap-3"
+                >
+                  <span 
+                    className="relative z-10 text-sm font-medium tracking-wide text-zen-text-main group-hover:text-white transition-colors"
+                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                  >
+                    View Dashboard
+                  </span>
+                  <span className="material-symbols-outlined text-lg text-zen-text-main group-hover:text-white group-hover:translate-x-1 transition-all">
+                    arrow_forward
+                  </span>
+                </Link>
+                
+                <a
+                  href="#features"
+                  className="group flex items-center gap-2 text-zen-text-sub hover:text-zen-text-main transition-colors"
+                >
+                  <span 
+                    className="text-sm font-medium"
+                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                  >
+                    Learn more
+                  </span>
+                  <span className="material-symbols-outlined text-sm group-hover:translate-y-0.5 transition-all">
+                    arrow_downward
+                  </span>
+                </a>
+              </div>
+
+              <div className="flex items-center gap-8 mt-16 pt-8 border-t border-zen-text-main/10">
+                <div>
+                  <div className="text-3xl font-light text-zen-text-main" style={{ fontFamily: '"Noto Sans", sans-serif' }}>3</div>
+                  <div className="text-[10px] uppercase tracking-wider text-zen-text-sub mt-1">Protocols Analyzed</div>
+                </div>
+                <div className="w-px h-10 bg-zen-text-main/10"></div>
+                <div>
+                  <div className="text-3xl font-light text-zen-text-main" style={{ fontFamily: '"Noto Sans", sans-serif' }}>100%</div>
+                  <div className="text-[10px] uppercase tracking-wider text-zen-text-sub mt-1">On-chain Data</div>
+                </div>
+                <div className="w-px h-10 bg-zen-text-main/10"></div>
+                <div>
+                  <div className="text-3xl font-light text-zen-text-main" style={{ fontFamily: '"Noto Sans", sans-serif' }}>Real-time</div>
+                  <div className="text-[10px] uppercase tracking-wider text-zen-text-sub mt-1">Analysis</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative flex items-center justify-center select-none order-1 lg:order-2">
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+                <div className="w-[450px] h-[450px] md:w-[580px] md:h-[580px] lg:w-[720px] lg:h-[720px] rounded-full orbital-line animate-spin-slow"></div>
+                <div className="w-[360px] h-[360px] md:w-[470px] md:h-[470px] lg:w-[580px] lg:h-[580px] rounded-full orbital-line animate-spin-reverse-slow border-dashed"></div>
+              </div>
+
+              <div className="w-[360px] h-[360px] md:w-[480px] md:h-[480px] lg:w-[580px] lg:h-[580px] relative z-10">
+                <Suspense fallback={
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-32 h-32 rounded-full bg-zen-indigo/10 animate-pulse"></div>
+                  </div>
+                }>
+                  <ParticleSphereScene />
+                </Suspense>
+              </div>
+            </div>
           </div>
 
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3 opacity-30">
-            <span className="h-16 w-[1px] bg-zen-text-main"></span>
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
+            <span className="h-12 w-[1px] bg-zen-text-main"></span>
             <span 
               className="text-[9px] font-medium tracking-[0.3em] uppercase"
               style={{ fontFamily: '"Noto Sans", sans-serif' }}
@@ -145,9 +183,9 @@ function LandingPage() {
 
         <section
           id="features"
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-12 relative z-20 pb-32"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 relative z-20 pb-32 mt-24 lg:mt-32"
         >
-          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[360px] group animate-fade-in stagger-1">
+          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[400px] group animate-fade-in stagger-1">
             <div className="flex-grow">
               <div className="icon-container mb-8">
                 <span className="material-symbols-outlined">query_stats</span>
@@ -180,7 +218,7 @@ function LandingPage() {
             </div>
           </article>
 
-          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[360px] group mt-0 md:mt-12 animate-fade-in stagger-2">
+          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[400px] group animate-fade-in stagger-2">
             <div className="flex-grow">
               <div className="icon-container mb-8">
                 <span className="material-symbols-outlined">grain</span>
@@ -213,7 +251,7 @@ function LandingPage() {
             </div>
           </article>
 
-          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[360px] group mt-0 md:mt-24 animate-fade-in stagger-3">
+          <article className="glass-card p-8 lg:p-10 flex flex-col min-h-[400px] group animate-fade-in stagger-3">
             <div className="flex-grow">
               <div className="icon-container mb-8">
                 <span className="material-symbols-outlined">graphic_eq</span>
@@ -247,168 +285,137 @@ function LandingPage() {
           </article>
         </section>
 
-        <section id="protocols" className="pb-32">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 
-              className="text-zen-indigo text-xs font-semibold tracking-[0.3em] uppercase mb-4 opacity-90"
-              style={{ fontFamily: '"Noto Sans", sans-serif' }}
-            >
-              Real-World Privacy Analysis
-            </h2>
+        <section id="protocols" className="py-24 border-t border-zen-text-main/5">
+          <div className="mb-16 animate-fade-in">
             <h3 
-              className="text-4xl md:text-5xl text-zen-text-main tracking-tight font-light"
+              className="text-5xl md:text-6xl lg:text-7xl text-zen-text-main leading-[0.95] tracking-tight mb-6"
               style={{ fontFamily: '"Noto Sans", sans-serif' }}
             >
-              Tested <span className="font-extralight">Protocols</span>
+              Tested<br/>
+              <span className="text-zen-indigo/70 font-light">Protocols</span>
             </h3>
+            <p 
+              className="text-base text-zen-text-sub leading-relaxed opacity-80 max-w-lg"
+              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+            >
+              Real-world privacy analysis on Solana mainnet. We measure what matters: timing correlation, amount linkability, and anonymity set degradation.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="glass-card p-8 relative group overflow-hidden animate-fade-in stagger-1">
-              <div className="absolute -right-20 -top-20 w-60 h-60 bg-red-500/5 rounded-full blur-[60px] group-hover:bg-red-500/10 transition-colors"></div>
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="icon-container">
-                    <span className="material-symbols-outlined text-red-400">
-                      lock_open
-                    </span>
+          <div className="space-y-4">
+            <div className="group cursor-pointer">
+              <div className="flex items-center justify-between py-6 border-b border-zen-text-main/10 hover:border-zen-indigo/30 transition-colors">
+                <div className="flex items-center gap-8">
+                  <div className="w-16 h-16 rounded-full bg-zen-text-main/5 flex items-center justify-center group-hover:bg-zen-indigo/10 transition-colors">
+                    <span className="material-symbols-outlined text-2xl text-zen-text-main group-hover:text-zen-indigo transition-colors">lock_open</span>
                   </div>
-                  <span 
-                    className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-semibold uppercase tracking-wider"
-                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                  >
-                    Vulnerable
-                  </span>
-                </div>
-                <h3 
-                  className="text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors font-medium"
-                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                >
-                  Privacy Cash
-                </h3>
-                <p 
-                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-sub mb-6"
-                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                >
-                  Mixing Protocol
-                </p>
-                <div className="space-y-4">
                   <div>
-                    <div 
-                      className="flex justify-between text-xs text-zen-text-sub uppercase tracking-wider mb-2"
-                      style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                    >
-                      <span>Privacy Score</span>
-                      <span className="text-red-500 font-bold">16/100</span>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h4 
+                        className="text-xl font-medium text-zen-text-main group-hover:text-zen-indigo transition-colors"
+                        style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                      >
+                        Privacy Cash
+                      </h4>
+                      <span className="px-2 py-0.5 rounded-full bg-zen-text-main/10 text-zen-text-sub text-[9px] font-bold uppercase tracking-wider">
+                        Vulnerable
+                      </span>
                     </div>
-                    <div className="h-1 w-full bg-zen-text-main/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-red-500 w-[16%] rounded-full"></div>
-                    </div>
+                    <p className="text-sm text-zen-text-sub">ZK Mixing Protocol · Timing Attack Susceptible</p>
                   </div>
+                </div>
+                <div className="flex items-center gap-12">
+                  <div className="text-right hidden md:block">
+                    <div className="text-2xl font-light text-zen-text-main">16<span className="text-sm text-zen-text-sub">/100</span></div>
+                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Privacy Score</div>
+                  </div>
+                  <span className="material-symbols-outlined text-zen-text-sub group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
+                    arrow_forward
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div className="glass-card p-8 relative group overflow-hidden animate-fade-in stagger-2">
-              <div className="absolute -left-20 -bottom-20 w-60 h-60 bg-blue-500/5 rounded-full blur-[60px] group-hover:bg-blue-500/10 transition-colors"></div>
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="icon-container">
-                    <span className="material-symbols-outlined text-blue-400">
-                      shield
-                    </span>
+            <div className="group cursor-pointer">
+              <div className="flex items-center justify-between py-6 border-b border-zen-text-main/10 hover:border-zen-indigo/30 transition-colors">
+                <div className="flex items-center gap-8">
+                  <div className="w-16 h-16 rounded-full bg-zen-text-main/5 flex items-center justify-center group-hover:bg-zen-indigo/10 transition-colors">
+                    <span className="material-symbols-outlined text-2xl text-zen-text-main group-hover:text-zen-indigo transition-colors">psychology</span>
                   </div>
-                  <span 
-                    className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-semibold uppercase tracking-wider"
-                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                  >
-                    No Usage
-                  </span>
-                </div>
-                <h3 
-                  className="text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors font-medium"
-                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                >
-                  Confidential Transfers
-                </h3>
-                <p 
-                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-sub mb-6"
-                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                >
-                  Token-2022 Feature
-                </p>
-                <div className="space-y-4">
                   <div>
-                    <div 
-                      className="flex justify-between text-xs text-zen-text-sub uppercase tracking-wider mb-2"
-                      style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                    >
-                      <span>Adoption</span>
-                      <span className="text-zen-text-main font-bold">0%</span>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h4 
+                        className="text-xl font-medium text-zen-text-main group-hover:text-zen-indigo transition-colors"
+                        style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                      >
+                        ShadowWire
+                      </h4>
+                      <span className="px-2 py-0.5 rounded-full bg-zen-text-main/10 text-zen-text-sub text-[9px] font-bold uppercase tracking-wider">
+                        Defeated
+                      </span>
                     </div>
-                    <div className="h-1 w-full bg-zen-text-main/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 w-[0%] rounded-full"></div>
-                    </div>
+                    <p className="text-sm text-zen-text-sub">Bulletproof ZK · Amount Correlation Broken</p>
                   </div>
+                </div>
+                <div className="flex items-center gap-12">
+                  <div className="text-right hidden md:block">
+                    <div className="text-2xl font-light text-zen-text-main">0<span className="text-sm text-zen-text-sub">/100</span></div>
+                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Privacy Score</div>
+                  </div>
+                  <span className="material-symbols-outlined text-zen-text-sub group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
+                    arrow_forward
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div className="glass-card p-8 relative group overflow-hidden animate-fade-in stagger-3">
-              <div className="absolute right-0 bottom-0 w-40 h-40 bg-purple-500/5 rounded-full blur-[60px] group-hover:bg-purple-500/10 transition-colors"></div>
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="icon-container">
-                    <span className="material-symbols-outlined text-purple-400">
-                      psychology
-                    </span>
+            <div className="group cursor-pointer">
+              <div className="flex items-center justify-between py-6 border-b border-zen-text-main/10 hover:border-zen-indigo/30 transition-colors">
+                <div className="flex items-center gap-8">
+                  <div className="w-16 h-16 rounded-full bg-zen-text-main/5 flex items-center justify-center group-hover:bg-zen-indigo/10 transition-colors">
+                    <span className="material-symbols-outlined text-2xl text-zen-text-main group-hover:text-zen-indigo transition-colors">swap_horiz</span>
                   </div>
-                  <span 
-                    className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-semibold uppercase tracking-wider"
-                    style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                  >
-                    Defeated
-                  </span>
-                </div>
-                <h3 
-                  className="text-2xl text-zen-text-main mb-2 group-hover:text-zen-indigo transition-colors font-medium"
-                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                >
-                  ShadowWire
-                </h3>
-                <p 
-                  className="text-[10px] font-medium uppercase tracking-widest text-zen-text-sub mb-6"
-                  style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                >
-                  Bulletproof ZK
-                </p>
-                <div className="space-y-4">
                   <div>
-                    <div 
-                      className="flex justify-between text-xs text-zen-text-sub uppercase tracking-wider mb-2"
-                      style={{ fontFamily: '"Noto Sans", sans-serif' }}
-                    >
-                      <span>Privacy Score</span>
-                      <span className="text-red-500 font-bold">0/100</span>
+                    <div className="flex items-center gap-3 mb-1">
+                      <h4 
+                        className="text-xl font-medium text-zen-text-main group-hover:text-zen-indigo transition-colors"
+                        style={{ fontFamily: '"Noto Sans", sans-serif' }}
+                      >
+                        SilentSwap
+                      </h4>
+                      <span className="px-2 py-0.5 rounded-full bg-zen-text-main/10 text-zen-text-sub text-[9px] font-bold uppercase tracking-wider">
+                        Limited
+                      </span>
                     </div>
-                    <div className="h-1 w-full bg-zen-text-main/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-purple-500 w-[0%] rounded-full"></div>
-                    </div>
+                    <p className="text-sm text-zen-text-sub">TEE Relay · Graph Analysis Possible</p>
                   </div>
+                </div>
+                <div className="flex items-center gap-12">
+                  <div className="text-right hidden md:block">
+                    <div className="text-2xl font-light text-zen-text-main">18<span className="text-sm text-zen-text-sub">/100</span></div>
+                    <div className="text-[10px] uppercase tracking-wider text-zen-text-sub">Privacy Score</div>
+                  </div>
+                  <span className="material-symbols-outlined text-zen-text-sub group-hover:text-zen-indigo group-hover:translate-x-1 transition-all">
+                    arrow_forward
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex justify-center mt-16">
+          <div className="flex items-center gap-6 mt-12 group/btn cursor-pointer w-fit">
             <Link
               to="/dashboard"
-              className="text-sm font-medium text-zen-text-sub hover:text-zen-indigo transition-colors flex items-center gap-2 group"
-              style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              className="flex items-center gap-6"
             >
-              View Full Analysis
-              <span className="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">
-                arrow_right_alt
+              <div className="w-12 h-12 rounded-full border border-zen-text-main/10 flex items-center justify-center group-hover/btn:border-zen-indigo/30 transition-all bg-white/50">
+                <span className="material-symbols-outlined text-zen-text-main group-hover/btn:text-zen-indigo transition-colors text-lg">arrow_forward</span>
+              </div>
+              <span 
+                className="text-xs uppercase tracking-widest text-zen-text-main group-hover/btn:text-zen-indigo transition-colors"
+                style={{ fontFamily: '"Noto Sans", sans-serif' }}
+              >
+                View Full Analysis
               </span>
             </Link>
           </div>
