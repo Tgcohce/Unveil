@@ -21,19 +21,19 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
       path: "/dashboard/privacy-cash",
       icon: "lock_open",
       label: "Privacy Cash",
-      score: 16,
+      score: 5,
     },
     {
       path: "/dashboard/shadowwire",
       icon: "psychology",
       label: "ShadowWire",
-      score: 0,
+      score: 47,
     },
     {
       path: "/dashboard/silentswap",
       icon: "swap_horiz",
       label: "SilentSwap",
-      score: 18,
+      score: 67,
     },
   ];
 

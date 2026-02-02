@@ -221,27 +221,32 @@ export function SilentSwapPage() {
                 <div key={idx} className="p-4 hover:bg-zen-text-main/[0.02]">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-zen-text-main">{(match.confidence * 100).toFixed(0)}% match</span>
-                      <span className="text-[10px] text-zen-text-sub">Δ {match.timeDeltaHours?.toFixed(1) || "?"}h</span>
+                      <span className="text-xs text-zen-text-main">{match.confidence}% match</span>
+                      <span className="text-[10px] text-zen-text-sub">{match.type === "round_trip_wallet" ? "Round-trip" : "Timing"}</span>
                     </div>
                     <span className="text-xs text-zen-text-main">
-                      {match.amount ? `${(match.amount / 1e9).toFixed(4)} SOL` : "-"}
+                      {match.inputAmount ? `${(match.inputAmount / 1e9).toFixed(4)} SOL` : "-"}
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-3 text-xs">
                     <div>
-                      <div className="text-[10px] text-zen-text-sub mb-0.5">Input</div>
-                      <a href={`https://solscan.io/tx/${match.input?.signature}`} target="_blank" rel="noopener noreferrer" className="text-zen-indigo hover:underline">
-                        {match.input?.signature ? truncateSig(match.input.signature) : "-"}
+                      <div className="text-[10px] text-zen-text-sub mb-0.5">Input TX</div>
+                      <a href={`https://solscan.io/tx/${match.inputSignature}`} target="_blank" rel="noopener noreferrer" className="text-zen-indigo hover:underline">
+                        {match.inputSignature ? truncateSig(match.inputSignature) : "-"}
                       </a>
                     </div>
                     <div>
-                      <div className="text-[10px] text-zen-text-sub mb-0.5">Output</div>
-                      <a href={`https://solscan.io/tx/${match.output?.signature}`} target="_blank" rel="noopener noreferrer" className="text-zen-indigo hover:underline">
-                        {match.output?.signature ? truncateSig(match.output.signature) : "-"}
+                      <div className="text-[10px] text-zen-text-sub mb-0.5">Output TX</div>
+                      <a href={`https://solscan.io/tx/${match.outputSignature}`} target="_blank" rel="noopener noreferrer" className="text-zen-indigo hover:underline">
+                        {match.outputSignature ? truncateSig(match.outputSignature) : "-"}
                       </a>
                     </div>
                   </div>
+                  {match.wallet && (
+                    <div className="mt-2 text-[10px] text-zen-text-sub">
+                      Wallet: <a href={`https://solscan.io/account/${match.wallet}`} target="_blank" rel="noopener noreferrer" className="text-zen-indigo hover:underline">{truncateSig(match.wallet)}</a>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
