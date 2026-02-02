@@ -250,8 +250,8 @@ export function ShadowWirePage() {
                           {truncateSig(transfer.signature)}
                         </a>
                       </td>
-                      <td className="py-2.5 px-4 text-zen-text-sub">{transfer.from ? truncateSig(transfer.from) : "-"}</td>
-                      <td className="py-2.5 px-4 text-zen-text-sub">{transfer.to ? truncateSig(transfer.to) : "-"}</td>
+                      <td className="py-2.5 px-4 text-zen-text-sub">{transfer.sender ? truncateSig(transfer.sender) : "-"}</td>
+                      <td className="py-2.5 px-4 text-zen-text-sub">{transfer.recipient ? truncateSig(transfer.recipient) : "-"}</td>
                       <td className="py-2.5 px-4 text-right text-zen-text-main">
                         {transfer.amount && transfer.amount > 0 ? `${formatted} ${symbol}` : "-"}
                       </td>
