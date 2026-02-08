@@ -28,6 +28,7 @@ import {
   SilentSwapAccount,
   SILENTSWAP_RELAY_ADDRESS,
 } from "./types";
+import { UnveilEventBus } from "./event-bus";
 
 // SilentSwap Solana relay address
 const RELAY_ADDRESS = new PublicKey(SILENTSWAP_RELAY_ADDRESS);
@@ -43,9 +44,11 @@ const FACILITATOR_DETECTION_PATTERNS = {
 
 export class SilentSwapIndexer {
   private helius: Helius;
+  private eventBus?: UnveilEventBus;
 
-  constructor(heliusApiKey: string) {
+  constructor(heliusApiKey: string, eventBus?: UnveilEventBus) {
     this.helius = new Helius(heliusApiKey);
+    this.eventBus = eventBus;
   }
 
   /**
@@ -75,7 +78,7 @@ export class SilentSwapIndexer {
       const inputs: SilentSwapInput[] = [];
 
       // Batch processing
-      const BATCH_SIZE = 5;
+      const BATCH_SIZE = 3;
       const DELAY_MS = 2000;
 
       for (let i = 0; i < transactions.length; i += BATCH_SIZE) {
@@ -232,7 +235,7 @@ export class SilentSwapIndexer {
       const outputs: SilentSwapOutput[] = [];
 
       // Batch processing
-      const BATCH_SIZE = 5;
+      const BATCH_SIZE = 3;
       const DELAY_MS = 2000;
 
       for (let i = 0; i < transactions.length; i += BATCH_SIZE) {
@@ -383,17 +386,15 @@ export class SilentSwapIndexer {
       const inputs: SilentSwapInput[] = [];
       const outputs: SilentSwapOutput[] = [];
 
-      const BATCH_SIZE = 5;
-      const DELAY_MS = 2000;
+      // Sequential fetching to respect Helius free tier rate limits
+      for (let i = 0; i < transactions.length; i++) {
+        const txSig = transactions[i];
 
-      for (let i = 0; i < transactions.length; i += BATCH_SIZE) {
-        const batch = transactions.slice(i, i + BATCH_SIZE);
+        if (i % 10 === 0) {
+          console.log(`Processing ${i + 1}/${transactions.length}...`);
+        }
 
-        console.log(
-          `Processing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(transactions.length / BATCH_SIZE)}...`,
-        );
-
-        const batchPromises = batch.map(async (txSig) => {
+        for (let attempt = 0; attempt < 3; attempt++) {
           try {
             const tx = await this.helius.connection.getParsedTransaction(
               txSig.signature,
@@ -402,28 +403,48 @@ export class SilentSwapIndexer {
               },
             );
 
-            if (!tx || !tx.meta || tx.meta.err)
-              return { input: null, output: null };
+            if (tx && tx.meta && !tx.meta.err) {
+              const input = this.parseAsInput(tx, txSig.signature);
+              const output = this.parseAsOutput(tx, txSig.signature);
 
-            const input = this.parseAsInput(tx, txSig.signature);
-            const output = this.parseAsOutput(tx, txSig.signature);
-
-            return { input, output };
-          } catch (err) {
+              if (input) {
+                inputs.push(input);
+                if (this.eventBus) {
+                  this.eventBus.emit("silentswap:input", input);
+                }
+              }
+              if (output) {
+                outputs.push(output);
+                if (this.eventBus) {
+                  this.eventBus.emit("silentswap:output", output);
+                }
+              }
+            }
+            break;
+          } catch (err: any) {
+            const is429 = err?.message?.includes("429") || err?.message?.includes("rate") || err?.message?.includes("Too Many");
+            if (is429 && attempt < 2) {
+              const backoff = 2000 * Math.pow(2, attempt);
+              console.log(`   ⏳ Rate limited, retry ${attempt + 1}/3 in ${backoff / 1000}s...`);
+              await new Promise((r) => setTimeout(r, backoff));
+              continue;
+            }
             console.error(`Error parsing transaction ${txSig.signature}:`, err);
-            return { input: null, output: null };
+            break;
           }
-        });
-
-        const results = await Promise.all(batchPromises);
-
-        for (const result of results) {
-          if (result.input) inputs.push(result.input);
-          if (result.output) outputs.push(result.output);
         }
 
-        if (i + BATCH_SIZE < transactions.length) {
-          await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
+        if (this.eventBus && i % 10 === 0) {
+          this.eventBus.emit("indexer:status", {
+            protocol: "SilentSwap",
+            status: "indexing",
+            progress: `${inputs.length + outputs.length}/${transactions.length}`,
+          });
+        }
+
+        // Delay between each request
+        if (i < transactions.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
         }
       }
 

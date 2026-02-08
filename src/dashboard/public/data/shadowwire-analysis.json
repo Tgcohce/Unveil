@@ -1,28 +1,29 @@
 {
   "protocol": "ShadowWire",
   "programId": "ApfNmzrNXLUQ5yWpQVmrCB4MNsaRqjsFrLXViBq2rBU",
-  "privacyScore": 47,
-  "totalTransfers": 80,
-  "visibleAddressLinks": 37,
-  "linkabilityRate": 0.4625,
+  "privacyScore": 48,
+  "totalTransfers": 317,
+  "visibleAddressLinks": 160,
+  "linkabilityRate": 0.5047318611987381,
   "analysisMethod": "Direct on-chain inspection - addresses are plaintext visible",
   "attackType": "No attack needed - addresses visible",
   "findings": [
-    "37 transfers have BOTH sender AND recipient addresses visible on-chain",
+    "160 transfers have BOTH sender AND recipient addresses visible on-chain",
     "Bulletproofs successfully hide amounts but provide zero address privacy",
     "Transaction graph is fully analyzable",
-    "53.7% of transfers have partial or full address exposure"
+    "50.5% of transfers have partial or full address exposure"
   ],
   "vulnerabilities": [
-    "CRITICAL: Sender and recipient addresses visible in 46.3% of transfers",
-    "CRITICAL: Bulletproofs only hide amounts - transaction graph exposed",
-    "HIGH: Address clustering trivial with visible addresses"
+    "CRITICAL: Sender and recipient addresses are VISIBLE on-chain in 50% of transfers",
+    "CRITICAL: Bulletproofs only hide amounts - transaction graph is fully analyzable",
+    "HIGH: 40% of addresses reused - enables clustering attacks"
   ],
   "recommendations": [
     "ShadowWire should NOT be used when address privacy is required",
-    "Bulletproofs alone are insufficient - need stealth addresses",
-    "Consider SilentSwap or Privacy Cash for address privacy"
+    "Bulletproofs alone are insufficient - need stealth addresses or similar",
+    "Consider Privacy Cash or SilentSwap for address privacy needs",
+    "If using ShadowWire, combine with external mixing for address obfuscation"
   ],
-  "visibleTransferLinks": 37,
-  "analysisTimestamp": "2026-02-02T02:16:16.725Z"
+  "visibleTransferLinks": 160,
+  "analysisTimestamp": "2026-02-08T19:45:52.630Z"
 }

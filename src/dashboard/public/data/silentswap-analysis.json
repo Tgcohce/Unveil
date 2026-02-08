@@ -1,28 +1,31 @@
 {
   "protocol": "SilentSwap",
   "relayAddress": "CbKGgVKLJFb8bBrf58DnAkdryX6ubewVytn7X957YwNr",
-  "privacyScore": 67,
-  "totalInputs": 104,
-  "totalOutputs": 74,
-  "confirmedMatches": 10,
-  "linkabilityRate": 0.096,
+  "privacyScore": 66,
+  "totalInputs": 138,
+  "totalOutputs": 90,
+  "confirmedMatches": 17,
+  "linkabilityRate": 0.12318840579710147,
   "analysisMethod": "Round-trip wallet detection - wallets appearing as both input source and output destination",
   "attackType": "Wallet graph analysis",
   "findings": [
-    "10 wallets identified that BOTH sent to AND received from SilentSwap",
+    "17 wallets identified that BOTH sent to AND received from SilentSwap",
     "These round-trip users have their privacy compromised",
     "Cross-chain routing prevents timing+amount correlation",
-    "90.4% of inputs remain unlinked"
+    "87.7% of inputs remain unlinked"
   ],
   "vulnerabilities": [
-    "MEDIUM: Round-trip users expose themselves (10 wallets, 9.6%)",
-    "LOW: Multi-input aggregation patterns detectable",
-    "INFO: Cross-chain timing still observable but not exploitable without amount correlation"
+    "MEDIUM: 17 wallets exposed via round-trip usage (same wallet sends AND receives)",
+    "HIGH: Low timing entropy (0%). Swap completion times are predictable.",
+    "MEDIUM: 90% of multi-output swaps have unique split patterns.",
+    "MEDIUM: Cross-chain timing is observable. Solana input → Solana output timing can be tracked even through Secret Network.",
+    "CRITICAL: 17 of 17 matches have >70% confidence. Privacy is severely compromised."
   ],
   "recommendations": [
-    "Use separate wallets for input and output",
-    "Avoid round-trip usage patterns",
-    "SilentSwap provides strong privacy for single-direction flows"
+    "Use separate wallets for sending and receiving to avoid round-trip exposure.",
+    "Randomize processing times to make correlation harder.",
+    "Avoid splitting outputs to multiple wallets, or use standard split ratios (50/50, 33/33/34).",
+    "Hold funds in Secret Network for variable periods (hours to days) before output."
   ],
-  "analysisTimestamp": "2026-02-02T02:16:16.715Z"
+  "analysisTimestamp": "2026-02-08T19:45:52.639Z"
 }

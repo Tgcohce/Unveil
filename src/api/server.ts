@@ -1,11 +1,13 @@
 /**
  * Express API server for UNVEIL
- * Provides REST endpoints for dashboard
+ * Provides REST endpoints for dashboard + optional WebSocket for real-time updates
  */
 
 import express, { Request, Response } from "express";
+import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
+import { WebSocketServer, WebSocket } from "ws";
 import { UnveilDatabase } from "../indexer/db";
 import { PrivacyScorer } from "../analysis/scoring";
 import { AnonymitySetCalculator } from "../analysis/anonymity-set";
@@ -22,30 +24,38 @@ import {
 
 dotenv.config();
 
-const app = express();
-const port = process.env.PORT || 3000;
+// WebSocket channel types
+type WsChannel = "transactions" | "matches" | "metrics" | "status";
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+interface WsClient {
+  ws: WebSocket;
+  channels: Set<WsChannel>;
+}
 
-// Database and analyzers
-const dbPath = process.env.DATABASE_PATH || "./data/unveil.db";
-const db = new UnveilDatabase(dbPath);
-const scorer = new PrivacyScorer();
-const anonymityCalculator = new AnonymitySetCalculator();
-const timingAnalyzer = new TimingAnalyzer();
-const amountAnalyzer = new AmountAnalyzer();
-const timingAttack = new TimingCorrelationAttack();
-const shadowwireAttack = new ShadowWireAttack();
-const silentswapAttack = new SilentSwapAttack();
+/**
+ * Create Express app with all API routes
+ */
+export function createApp(db: UnveilDatabase) {
+  const app = express();
 
-// Cache for metrics (5 minute TTL)
-let metricsCache: { data: ProtocolMetrics | null; timestamp: number } = {
-  data: null,
-  timestamp: 0,
-};
-const CACHE_TTL = parseInt(process.env.CACHE_TTL || "300000"); // 5 minutes
+  // Middleware
+  app.use(cors());
+  app.use(express.json());
+
+  const scorer = new PrivacyScorer();
+  const anonymityCalculator = new AnonymitySetCalculator();
+  const timingAnalyzer = new TimingAnalyzer();
+  const amountAnalyzer = new AmountAnalyzer();
+  const timingAttack = new TimingCorrelationAttack();
+  const shadowwireAttack = new ShadowWireAttack();
+  const silentswapAttack = new SilentSwapAttack();
+
+  // Cache for metrics (5 minute TTL)
+  let metricsCache: { data: ProtocolMetrics | null; timestamp: number } = {
+    data: null,
+    timestamp: 0,
+  };
+  const CACHE_TTL = parseInt(process.env.CACHE_TTL || "300000"); // 5 minutes
 
 /**
  * GET / - Health check
@@ -992,24 +1002,91 @@ app.get("/api/dashboard/summary", async (req: Request, res: Response) => {
   }
 });
 
-// Helper function to get tier name from score
-function getPrivacyTierName(score: number): string {
-  if (score >= 75) return "Strong";
-  if (score >= 50) return "Moderate";
-  if (score >= 25) return "Limited";
-  return "Minimal";
+  // Helper function to get tier name from score
+  function getPrivacyTierName(score: number): string {
+    if (score >= 75) return "Strong";
+    if (score >= 50) return "Moderate";
+    if (score >= 25) return "Limited";
+    return "Minimal";
+  }
+
+  /**
+   * GET /api/realtime/status - Connection info and last update time
+   */
+  app.get("/api/realtime/status", (req: Request, res: Response) => {
+    res.json({
+      mode: "realtime",
+      lastUpdated: new Date().toISOString(),
+      wsPath: "/ws",
+    });
+  });
+
+  return app;
 }
 
-// Start server
-app.listen(port, () => {
-  console.log(`🚀 UNVEIL API server running on http://localhost:${port}`);
-  console.log(`📊 Database: ${dbPath}`);
-  console.log(`💾 Cache TTL: ${CACHE_TTL}ms`);
-});
+/**
+ * Create WebSocket server attached to an HTTP server
+ */
+export function createWebSocketServer(server: http.Server) {
+  const wss = new WebSocketServer({ server, path: "/ws" });
+  const clients: Set<WsClient> = new Set();
 
-// Graceful shutdown
-process.on("SIGINT", () => {
-  console.log("\n🛑 Shutting down API server...");
-  db.close();
-  process.exit(0);
-});
+  wss.on("connection", (ws) => {
+    const client: WsClient = { ws, channels: new Set() };
+    clients.add(client);
+    console.log(`🔌 WebSocket client connected (${clients.size} total)`);
+
+    ws.on("message", (data) => {
+      try {
+        const msg = JSON.parse(data.toString());
+        if (msg.type === "subscribe" && msg.channel) {
+          client.channels.add(msg.channel as WsChannel);
+        }
+      } catch {
+        // Ignore malformed messages
+      }
+    });
+
+    ws.on("close", () => {
+      clients.delete(client);
+      console.log(`🔌 WebSocket client disconnected (${clients.size} total)`);
+    });
+
+    // Auto-subscribe to all channels on connect
+    client.channels.add("transactions");
+    client.channels.add("matches");
+    client.channels.add("metrics");
+    client.channels.add("status");
+  });
+
+  function broadcast(channel: WsChannel, data: any) {
+    const message = JSON.stringify({ channel, data, timestamp: Date.now() });
+    for (const client of clients) {
+      if (client.channels.has(channel) && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(message);
+      }
+    }
+  }
+
+  return { wss, broadcast };
+}
+
+// Standalone server mode (npm run api)
+if (require.main === module) {
+  const dbPath = process.env.DATABASE_PATH || "./data/unveil.db";
+  const port = process.env.PORT || 3000;
+  const db = new UnveilDatabase(dbPath);
+  const app = createApp(db);
+
+  app.listen(port, () => {
+    console.log(`🚀 UNVEIL API server running on http://localhost:${port}`);
+    console.log(`📊 Database: ${dbPath}`);
+    console.log(`💾 REST-only mode (no WebSocket)`);
+  });
+
+  process.on("SIGINT", () => {
+    console.log("\n🛑 Shutting down API server...");
+    db.close();
+    process.exit(0);
+  });
+}

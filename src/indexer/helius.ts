@@ -28,81 +28,102 @@ export class HeliusClient {
   ): Promise<
     Array<{ signature: string; slot: number; blockTime: number | null }>
   > {
-    try {
-      const pubkey = new PublicKey(programId);
-      const signatures = await this.connection.getSignaturesForAddress(pubkey, {
-        limit,
-        before,
-      });
+    const pubkey = new PublicKey(programId);
 
-      return signatures.map((sig) => ({
-        signature: sig.signature,
-        slot: sig.slot,
-        blockTime: sig.blockTime ?? null,
-      }));
-    } catch (error) {
-      console.error("Error fetching signatures:", error);
-      throw error;
+    for (let attempt = 0; attempt < 4; attempt++) {
+      try {
+        const signatures = await this.connection.getSignaturesForAddress(pubkey, {
+          limit,
+          before,
+        });
+
+        return signatures.map((sig) => ({
+          signature: sig.signature,
+          slot: sig.slot,
+          blockTime: sig.blockTime ?? null,
+        }));
+      } catch (error: any) {
+        const is429 = error?.message?.includes("429") || error?.message?.includes("rate") || error?.message?.includes("Too Many");
+        if (is429 && attempt < 3) {
+          const backoff = 3000 * Math.pow(2, attempt);
+          console.log(`   ⏳ Rate limited on getSignatures, retry ${attempt + 1}/3 in ${backoff / 1000}s...`);
+          await this.delay(backoff);
+          continue;
+        }
+        console.error("Error fetching signatures:", error);
+        throw error;
+      }
     }
+    throw new Error("Failed to fetch signatures after retries");
   }
 
   /**
    * Fetch and parse a single transaction
    * @param signature Transaction signature
    */
-  async getTransaction(signature: string): Promise<ParsedTransaction | null> {
-    try {
-      const tx = await this.connection.getTransaction(signature, {
-        maxSupportedTransactionVersion: 0,
-        commitment: "confirmed",
-      });
+  async getTransaction(signature: string, maxRetries: number = 3): Promise<ParsedTransaction | null> {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const tx = await this.connection.getTransaction(signature, {
+          maxSupportedTransactionVersion: 0,
+          commitment: "confirmed",
+        });
 
-      if (!tx || !tx.blockTime) {
+        if (!tx || !tx.blockTime) {
+          return null;
+        }
+
+        const instructions = tx.transaction.message.compiledInstructions
+          .map((instr) => {
+            const accountKeys = tx.transaction.message.staticAccountKeys;
+            const programId = accountKeys[instr.programIdIndex];
+
+            if (!programId) {
+              return null;
+            }
+
+            return {
+              programId: programId.toBase58(),
+              data: Buffer.from(instr.data),
+              keys: instr.accountKeyIndexes
+                .map((idx) => {
+                  const key = accountKeys[idx];
+                  if (!key) return null;
+                  return {
+                    pubkey: key.toBase58(),
+                    isSigner: tx.transaction.message.isAccountSigner(idx),
+                    isWritable: tx.transaction.message.isAccountWritable(idx),
+                  };
+                })
+                .filter((k): k is NonNullable<typeof k> => k !== null),
+            };
+          })
+          .filter((instr): instr is NonNullable<typeof instr> => instr !== null);
+
+        return {
+          signature,
+          slot: tx.slot,
+          timestamp: tx.blockTime * 1000, // Convert to milliseconds
+          instructions,
+          // Add balance change data for SOL flow analysis
+          meta: tx.meta,
+          accountKeys: tx.transaction.message.staticAccountKeys.map((key) =>
+            key.toBase58(),
+          ),
+        };
+      } catch (error: any) {
+        const is429 = error?.message?.includes("429") || error?.message?.includes("rate") || error?.message?.includes("Too Many");
+        if (is429 && attempt < maxRetries) {
+          const backoff = 2000 * Math.pow(2, attempt);
+          console.log(`   ⏳ Rate limited on ${signature.slice(0, 8)}..., retry ${attempt + 1}/${maxRetries} in ${backoff / 1000}s`);
+          await this.delay(backoff);
+          continue;
+        }
+        console.error(`Error fetching transaction ${signature}:`, error);
         return null;
       }
-
-      const instructions = tx.transaction.message.compiledInstructions
-        .map((instr) => {
-          const accountKeys = tx.transaction.message.staticAccountKeys;
-          const programId = accountKeys[instr.programIdIndex];
-
-          if (!programId) {
-            return null;
-          }
-
-          return {
-            programId: programId.toBase58(),
-            data: Buffer.from(instr.data),
-            keys: instr.accountKeyIndexes
-              .map((idx) => {
-                const key = accountKeys[idx];
-                if (!key) return null;
-                return {
-                  pubkey: key.toBase58(),
-                  isSigner: tx.transaction.message.isAccountSigner(idx),
-                  isWritable: tx.transaction.message.isAccountWritable(idx),
-                };
-              })
-              .filter((k): k is NonNullable<typeof k> => k !== null),
-          };
-        })
-        .filter((instr): instr is NonNullable<typeof instr> => instr !== null);
-
-      return {
-        signature,
-        slot: tx.slot,
-        timestamp: tx.blockTime * 1000, // Convert to milliseconds
-        instructions,
-        // Add balance change data for SOL flow analysis
-        meta: tx.meta,
-        accountKeys: tx.transaction.message.staticAccountKeys.map((key) =>
-          key.toBase58(),
-        ),
-      };
-    } catch (error) {
-      console.error(`Error fetching transaction ${signature}:`, error);
-      return null;
     }
+    return null;
   }
 
   /**
@@ -112,24 +133,19 @@ export class HeliusClient {
    */
   async getTransactions(
     signatures: string[],
-    batchSize: number = 10,
+    _batchSize: number = 1,
   ): Promise<ParsedTransaction[]> {
     const results: ParsedTransaction[] = [];
 
-    for (let i = 0; i < signatures.length; i += batchSize) {
-      const batch = signatures.slice(i, i + batchSize);
-      const promises = batch.map((sig) => this.getTransaction(sig));
-      const transactions = await Promise.all(promises);
-
-      for (const tx of transactions) {
-        if (tx) {
-          results.push(tx);
-        }
+    // Sequential fetching — one at a time with 150ms delay (safe for 10 RPS free tier)
+    for (let i = 0; i < signatures.length; i++) {
+      const tx = await this.getTransaction(signatures[i]);
+      if (tx) {
+        results.push(tx);
       }
 
-      // Small delay to avoid rate limiting
-      if (i + batchSize < signatures.length) {
-        await this.delay(100);
+      if (i < signatures.length - 1) {
+        await this.delay(150);
       }
     }
 

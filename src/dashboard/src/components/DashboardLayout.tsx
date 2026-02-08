@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { ReactNode } from "react";
+import { ConnectionStatus } from "./ConnectionStatus";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -91,12 +92,7 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
         </nav>
 
         <div className="p-4 border-t border-zen-text-main/5 hidden lg:block">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-500/70"></div>
-            <span className="text-[11px] text-zen-text-sub/70">
-              Connected
-            </span>
-          </div>
+          <ConnectionStatus />
         </div>
       </aside>
 

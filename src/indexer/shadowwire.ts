@@ -18,9 +18,13 @@
  * - Smaller anonymity sets because addresses leak information
  */
 
+import dotenv from "dotenv";
+dotenv.config();
+
 import { Helius } from "helius-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { ShadowWireTransfer, ShadowWireAccount } from "./types";
+import { UnveilEventBus } from "./event-bus";
 import axios from "axios";
 
 // ShadowWire program ID (the actual program, not the pool)
@@ -38,9 +42,11 @@ const SHADOWWIRE_API = "https://shadow.radr.fun/shadowpay/api";
 
 export class ShadowWireIndexer {
   private helius: Helius;
+  private eventBus?: UnveilEventBus;
 
-  constructor(heliusApiKey: string) {
+  constructor(heliusApiKey: string, eventBus?: UnveilEventBus) {
     this.helius = new Helius(heliusApiKey);
+    this.eventBus = eventBus;
   }
 
   /**
@@ -103,17 +109,15 @@ export class ShadowWireIndexer {
       const transfers: ShadowWireTransfer[] = [];
 
       // Batch processing to avoid rate limits
-      const BATCH_SIZE = 5; // Reduced from 10
-      const DELAY_MS = 2000; // Increased from 1000
+      // Sequential fetching to respect Helius free tier rate limits
+      for (let i = 0; i < transactions.length; i++) {
+        const txSig = transactions[i];
 
-      for (let i = 0; i < transactions.length; i += BATCH_SIZE) {
-        const batch = transactions.slice(i, i + BATCH_SIZE);
+        if (i % 10 === 0) {
+          console.log(`Processing ${i + 1}/${transactions.length}...`);
+        }
 
-        console.log(
-          `Processing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(transactions.length / BATCH_SIZE)}...`,
-        );
-
-        const batchPromises = batch.map(async (txSig) => {
+        for (let attempt = 0; attempt < 3; attempt++) {
           try {
             const tx = await this.helius.connection.getParsedTransaction(
               txSig.signature,
@@ -122,26 +126,40 @@ export class ShadowWireIndexer {
               },
             );
 
-            if (!tx || !tx.meta || tx.meta.err) return null;
-
-            return this.parseTransfer(tx, txSig.signature);
-          } catch (err) {
+            if (tx && tx.meta && !tx.meta.err) {
+              const parsed = this.parseTransfer(tx, txSig.signature);
+              if (parsed) {
+                transfers.push(parsed);
+                if (this.eventBus) {
+                  this.eventBus.emit("shadowwire:transfer", parsed);
+                }
+              }
+            }
+            break;
+          } catch (err: any) {
+            const is429 = err?.message?.includes("429") || err?.message?.includes("rate") || err?.message?.includes("Too Many");
+            if (is429 && attempt < 2) {
+              const backoff = 2000 * Math.pow(2, attempt);
+              console.log(`   ⏳ Rate limited, retry ${attempt + 1}/3 in ${backoff / 1000}s...`);
+              await new Promise((r) => setTimeout(r, backoff));
+              continue;
+            }
             console.error(`Error parsing transaction ${txSig.signature}:`, err);
-            return null;
-          }
-        });
-
-        const results = await Promise.all(batchPromises);
-
-        for (const parsed of results) {
-          if (parsed) {
-            transfers.push(parsed);
+            break;
           }
         }
 
-        // Delay between batches
-        if (i + BATCH_SIZE < transactions.length) {
-          await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
+        if (this.eventBus && i % 10 === 0) {
+          this.eventBus.emit("indexer:status", {
+            protocol: "ShadowWire",
+            status: "indexing",
+            progress: `${transfers.length}/${transactions.length}`,
+          });
+        }
+
+        // Delay between each request
+        if (i < transactions.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
         }
       }
 
@@ -512,7 +530,7 @@ if (require.main === module) {
     // Save to database
     if (transfers.length > 0) {
       const { UnveilDatabase } = await import("./db");
-      const dbPath = process.env.DATABASE_PATH || "./data/unveil.db";
+      const dbPath = process.env.DATABASE_PATH || "./data/unveil_working.db";
       const db = new UnveilDatabase(dbPath);
 
       console.log("\nSaving to database...");

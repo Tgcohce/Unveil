@@ -8,6 +8,7 @@ import { HeliusClient } from "./helius";
 import { PrivacyCashBalanceParser } from "./privacy-cash-balance";
 import { UnveilDatabase } from "./db";
 import { IndexerConfig } from "./types";
+import { UnveilEventBus } from "./event-bus";
 
 dotenv.config();
 
@@ -17,12 +18,14 @@ export class PrivacyCashIndexer {
   private db: UnveilDatabase;
   private config: IndexerConfig;
   private isRunning: boolean = false;
+  private eventBus?: UnveilEventBus;
 
-  constructor(config: IndexerConfig) {
+  constructor(config: IndexerConfig, eventBus?: UnveilEventBus) {
     this.config = config;
     this.helius = new HeliusClient(config.heliusApiKey);
     this.parser = new PrivacyCashBalanceParser();
     this.db = new UnveilDatabase(config.databasePath);
+    this.eventBus = eventBus;
   }
 
   /**
@@ -95,7 +98,7 @@ export class PrivacyCashIndexer {
         console.log("📦 Fetching transaction details...");
         const transactions = await this.helius.getTransactions(
           signatures.map((s) => s.signature),
-          10, // Batch size for parallel fetching
+          3, // Batch size for parallel fetching
         );
 
         console.log(`✅ Fetched ${transactions.length} transactions`);
@@ -113,11 +116,21 @@ export class PrivacyCashIndexer {
         if (deposits.length > 0) {
           console.log("💾 Storing deposits...");
           this.db.insertDeposits(deposits);
+          if (this.eventBus) {
+            for (const deposit of deposits) {
+              this.eventBus.emit("deposit:new", { deposit, protocol: "Privacy Cash" });
+            }
+          }
         }
 
         if (withdrawals.length > 0) {
           console.log("💾 Storing withdrawals...");
           this.db.insertWithdrawals(withdrawals);
+          if (this.eventBus) {
+            for (const withdrawal of withdrawals) {
+              this.eventBus.emit("withdrawal:new", { withdrawal, protocol: "Privacy Cash" });
+            }
+          }
         }
 
         // Update indexer state
@@ -135,6 +148,15 @@ export class PrivacyCashIndexer {
         }
 
         totalProcessed += transactions.length;
+
+        if (this.eventBus) {
+          this.eventBus.emit("indexer:status", {
+            protocol: "Privacy Cash",
+            status: "indexing",
+            progress: `${totalProcessed} transactions`,
+            message: `${deposits.length} deposits, ${withdrawals.length} withdrawals in batch`,
+          });
+        }
 
         // Show progress
         const stats = this.db.getStats();
@@ -193,8 +215,8 @@ if (require.main === module) {
     programId:
       process.env.PRIVACY_CASH_PROGRAM_ID ||
       "9fhQBbumKEFuXtMBDw8AaQyAjCorLGJQiS3skWZdQyQD",
-    batchSize: parseInt(process.env.INDEX_BATCH_SIZE || "1000"),
-    delayMs: parseInt(process.env.INDEX_DELAY_MS || "100"),
+    batchSize: parseInt(process.env.INDEX_BATCH_SIZE || "100"),
+    delayMs: parseInt(process.env.INDEX_DELAY_MS || "2000"),
     databasePath: process.env.DATABASE_PATH || "./data/unveil.db",
   };
 
