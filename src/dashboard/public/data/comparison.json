@@ -34,28 +34,28 @@
   },
   "silentSwap": {
     "protocol": "SilentSwap",
-    "privacyScore": 62,
-    "totalInputs": 77,
-    "totalOutputs": 85,
-    "confirmedDeanonymizations": 17,
-    "linkabilityRate": 0.2207792207792208,
+    "privacyScore": 64,
+    "totalInputs": 19,
+    "totalOutputs": 30,
+    "confirmedDeanonymizations": 3,
+    "linkabilityRate": 0.15789473684210525,
     "hidesAmounts": false,
     "hidesAddresses": true,
     "usesZKProofs": false,
     "zkProofType": "Cross-chain (Secret Network)",
     "attackMethods": [
-      "Round-trip wallet exposure (17 wallets)"
+      "Round-trip wallet exposure (3 wallets)"
     ],
-    "keyVulnerability": "Wallets that both send and receive through SilentSwap are linkable. 22.1% exposure rate."
+    "keyVulnerability": "Wallets that both send and receive through SilentSwap are linkable. 15.8% exposure rate."
   },
   "summary": {
     "winner": "SilentSwap",
     "totalDeanonymizations": {
       "privacyCash": 1516,
       "shadowWire": 160,
-      "silentSwap": 17
+      "silentSwap": 3
     },
-    "recommendation": "SilentSwap provides the best privacy (62 score, 22.1% linkable) via cross-chain routing. Privacy Cash (39 score, 5.3% linkable) and ShadowWire (48 score, 50.5% linkable) both have significant vulnerabilities.",
+    "recommendation": "SilentSwap provides the best privacy (64 score, 15.8% linkable) via cross-chain routing. Privacy Cash (39 score, 5.3% linkable) and ShadowWire (48 score, 50.5% linkable) both have significant vulnerabilities.",
     "methodology": "Analysis based on on-chain data. Privacy Cash attacked via timing+amount correlation. ShadowWire addresses directly visible. SilentSwap attacked via round-trip wallet detection."
   }
 }

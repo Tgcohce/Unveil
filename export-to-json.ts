@@ -172,8 +172,9 @@ async function main() {
   writeJson("shadowwire-matches.json", { matches: swMatchesOut });
 
   // ── SilentSwap ──
-  // Filter: only post-launch transactions and exclude dust/health-check pings (< 1000 lamports)
-  const DUST_THRESHOLD = 1000; // lamports
+  // Filter: only post-launch transactions and exclude dust/test amounts (< 0.01 SOL)
+  // All real SilentSwap swaps are ≥ 0.05 SOL; amounts below 0.01 SOL are test pings
+  const DUST_THRESHOLD = 10_000_000; // 0.01 SOL in lamports
   const ssInputs = db.getSilentSwapInputsByTimeRange(SILENTSWAP_LAUNCH_DATE, Date.now())
     .filter(i => i.amount >= DUST_THRESHOLD);
   const ssOutputs = db.getSilentSwapOutputsByTimeRange(SILENTSWAP_LAUNCH_DATE, Date.now())

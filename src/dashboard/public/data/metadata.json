@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-10T04:11:04.849Z",
+  "lastUpdated": "2026-02-10T07:05:52.688Z",
   "version": "1.0.0",
   "protocols": {
     "privacyCash": {
@@ -10,8 +10,8 @@
       "transfers": 317
     },
     "silentSwap": {
-      "inputs": 77,
-      "outputs": 85
+      "inputs": 19,
+      "outputs": 30
     }
   }
 }
