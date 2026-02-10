@@ -41,7 +41,7 @@ export function SilentSwapPage() {
             </p>
           </div>
           <div className="text-right shrink-0">
-            <div className="text-2xl font-light text-zen-text-main">{ssAnalysis?.privacyScore || 67}</div>
+            <div className="text-2xl font-light text-zen-text-main">{ssAnalysis?.privacyScore ?? 0}</div>
             <div className="text-[10px] text-zen-text-sub">/100</div>
           </div>
         </div>
@@ -53,10 +53,10 @@ export function SilentSwapPage() {
           <div className="bg-white border border-zen-text-main/10 p-4 rounded-xl">
             <div className="text-[10px] uppercase tracking-wider text-zen-text-sub mb-1">Privacy Score</div>
             <div className="text-2xl font-light text-zen-text-main">
-              {ssAnalysis?.privacyScore || 67}<span className="text-sm text-zen-text-sub">/100</span>
+              {ssAnalysis?.privacyScore ?? 0}<span className="text-sm text-zen-text-sub">/100</span>
             </div>
             <div className="w-full h-1 bg-zen-text-main/5 mt-3 rounded-full overflow-hidden">
-              <div className="h-full bg-zen-text-main/30 rounded-full" style={{ width: `${ssAnalysis?.privacyScore || 67}%` }}></div>
+              <div className="h-full bg-zen-text-main/30 rounded-full" style={{ width: `${ssAnalysis?.privacyScore ?? 0}%` }}></div>
             </div>
           </div>
 
@@ -101,7 +101,7 @@ export function SilentSwapPage() {
                   cx="50" cy="50" fill="none" r="45" 
                   stroke="rgba(45,42,38,0.25)" 
                   strokeDasharray="283" 
-                  strokeDashoffset={283 - (283 * (ssAnalysis?.privacyScore || 67)) / 100}
+                  strokeDashoffset={283 - (283 * (ssAnalysis?.privacyScore ?? 0)) / 100}
                   strokeWidth="2"
                   strokeLinecap="round"
                   className="transition-all duration-1000"
@@ -109,7 +109,7 @@ export function SilentSwapPage() {
               </svg>
               <div className="relative z-10 text-center flex flex-col items-center">
                 <span className="material-symbols-outlined text-zen-text-main text-3xl mb-2">swap_horiz</span>
-                <div className="text-4xl font-light text-zen-text-main">{ssAnalysis?.privacyScore || 67}</div>
+                <div className="text-4xl font-light text-zen-text-main">{ssAnalysis?.privacyScore ?? 0}</div>
                 <div className="text-[10px] uppercase tracking-wider text-zen-text-sub mt-1">Privacy Score</div>
               </div>
             </div>

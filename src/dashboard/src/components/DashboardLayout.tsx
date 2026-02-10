@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ConnectionStatus } from "./ConnectionStatus";
 
 interface DashboardLayoutProps {
@@ -8,33 +9,44 @@ interface DashboardLayoutProps {
   subtitle?: string;
 }
 
+const loadJsonData = async (filename: string) => {
+  const response = await fetch(`/data/${filename}`);
+  if (!response.ok) throw new Error(`Failed to load ${filename}`);
+  return response.json();
+};
+
 export function DashboardLayout({ children, title, subtitle }: DashboardLayoutProps) {
   const location = useLocation();
-  
+
+  const { data: comparison } = useQuery({
+    queryKey: ["compare"],
+    queryFn: () => loadJsonData("comparison.json"),
+  });
+
   const navItems = [
     {
       path: "/dashboard",
       icon: "dashboard",
       label: "Overview",
-      score: null,
+      score: null as number | null,
     },
     {
       path: "/dashboard/privacy-cash",
       icon: "lock_open",
       label: "Privacy Cash",
-      score: 5,
+      score: comparison?.privacyCash?.privacyScore ?? null,
     },
     {
       path: "/dashboard/shadowwire",
       icon: "psychology",
       label: "ShadowWire",
-      score: 47,
+      score: comparison?.shadowWire?.privacyScore ?? null,
     },
     {
       path: "/dashboard/silentswap",
       icon: "swap_horiz",
       label: "SilentSwap",
-      score: 67,
+      score: comparison?.silentSwap?.privacyScore ?? null,
     },
   ];
 

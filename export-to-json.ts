@@ -45,7 +45,27 @@ async function main() {
 
   // Timing attack analysis
   const { results, summary } = timingAttack.analyzeAll(withdrawals, deposits);
-  const pcPrivacyScore = Math.round((1 - summary.attackSuccessRate / 100) * 100);
+
+  // Privacy Cash privacy score — penalty-based, consistent with ShadowWire/SilentSwap methodology
+  // Start at 100 and subtract for each vulnerability discovered
+  let pcScore = 100;
+
+  // CRITICAL: Amounts are fully visible on-chain — enables deposit-withdrawal correlation
+  pcScore -= 45;
+
+  // Linkability penalty: % of withdrawals with anonymity set < 5 (confirmed deanonymized)
+  pcScore -= (summary.attackSuccessRate / 100) * 25;
+
+  // Match coverage penalty: % of withdrawals with at least one timing+amount match
+  const matchesWithSources = results.filter((r) => r.likelySources.length > 0).length;
+  const matchRate = matchesWithSources / Math.max(summary.totalWithdrawals, 1);
+  pcScore -= matchRate * 15;
+
+  // Anonymity set penalty
+  if (summary.averageAnonymitySet < 50) pcScore -= 10;
+  else if (summary.averageAnonymitySet < 100) pcScore -= 5;
+
+  const pcPrivacyScore = Math.max(0, Math.round(pcScore));
 
   // matches.json — full timing attack results
   writeJson("matches.json", {
@@ -126,7 +146,7 @@ async function main() {
 
     writeJson("shadowwire-analysis.json", {
       protocol: "ShadowWire",
-      programId: "ApfNmzrNXLUQ5yWpQVmrCB4MNsaRqjsFrLXViBq2rBU",
+      programId: "GQBqwwoikYh7p6KEUHDUu5r9dHHXx9tMGskAPubmFPzD",
       privacyScore: swPrivacyScore,
       totalTransfers: swAnalysis.totalTransfers,
       visibleAddressLinks: swVisibleLinks,
