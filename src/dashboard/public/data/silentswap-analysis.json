@@ -1,23 +1,23 @@
 {
   "protocol": "SilentSwap",
   "relayAddress": "CbKGgVKLJFb8bBrf58DnAkdryX6ubewVytn7X957YwNr",
-  "privacyScore": 66,
-  "totalInputs": 138,
-  "totalOutputs": 90,
+  "privacyScore": 62,
+  "totalInputs": 77,
+  "totalOutputs": 85,
   "confirmedMatches": 17,
-  "linkabilityRate": 0.12318840579710147,
+  "linkabilityRate": 0.2207792207792208,
   "analysisMethod": "Round-trip wallet detection - wallets appearing as both input source and output destination",
   "attackType": "Wallet graph analysis",
   "findings": [
     "17 wallets identified that BOTH sent to AND received from SilentSwap",
     "These round-trip users have their privacy compromised",
     "Cross-chain routing prevents timing+amount correlation",
-    "87.7% of inputs remain unlinked"
+    "77.9% of inputs remain unlinked"
   ],
   "vulnerabilities": [
     "MEDIUM: 17 wallets exposed via round-trip usage (same wallet sends AND receives)",
     "HIGH: Low timing entropy (0%). Swap completion times are predictable.",
-    "MEDIUM: 90% of multi-output swaps have unique split patterns.",
+    "MEDIUM: 89% of multi-output swaps have unique split patterns.",
     "MEDIUM: Cross-chain timing is observable. Solana input → Solana output timing can be tracked even through Secret Network.",
     "CRITICAL: 17 of 17 matches have >70% confidence. Privacy is severely compromised."
   ],
@@ -27,5 +27,5 @@
     "Avoid splitting outputs to multiple wallets, or use standard split ratios (50/50, 33/33/34).",
     "Hold funds in Secret Network for variable periods (hours to days) before output."
   ],
-  "analysisTimestamp": "2026-02-08T19:45:52.639Z"
+  "analysisTimestamp": "2026-02-10T04:11:04.836Z"
 }

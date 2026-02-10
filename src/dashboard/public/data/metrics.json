@@ -1,20 +1,20 @@
 {
   "protocol": "Privacy Cash",
   "programId": "9fhQBbumKEFuXtMBDw8AaQyAjCorLGJQiS3skWZdQyQD",
-  "tvl": 74037034947620,
-  "totalDeposits": 5419,
-  "totalWithdrawals": 8239,
-  "confirmedDeanonymizations": 1348,
-  "linkabilityRate": 0.1636120888457337,
-  "uniqueDepositors": 2971,
-  "avgAnonymitySet": 35.91,
-  "medianAnonymitySet": 36,
+  "tvl": 217172958670966,
+  "totalDeposits": 18396,
+  "totalWithdrawals": 28519,
+  "confirmedDeanonymizations": 1516,
+  "linkabilityRate": 0.05315754409341142,
+  "uniqueDepositors": 8582,
+  "avgAnonymitySet": 118.44,
+  "medianAnonymitySet": 118,
   "minAnonymitySet": 0,
   "attackMethods": [
     "Timing correlation",
     "Amount matching",
     "Address reuse"
   ],
-  "privacyScore": 26,
-  "lastUpdated": "2026-02-08T19:45:52.616Z"
+  "privacyScore": 39,
+  "lastUpdated": "2026-02-10T04:11:04.805Z"
 }

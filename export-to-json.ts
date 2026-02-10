@@ -12,6 +12,7 @@ import { UnveilDatabase } from "./src/indexer/db";
 import { TimingCorrelationAttack } from "./src/analysis/timing-attack";
 import { ShadowWireAttack } from "./src/analysis/shadowwire-attack";
 import { SilentSwapAttack } from "./src/analysis/silentswap-attack";
+import { SILENTSWAP_LAUNCH_DATE } from "./src/indexer/types";
 
 const DB_PATH = process.env.DATABASE_PATH || "./data/unveil_working.db";
 const OUT_DIR = path.join(__dirname, "src/dashboard/public/data");
@@ -67,14 +68,16 @@ async function main() {
 
   const pcPrivacyScore = Math.max(0, Math.round(pcScore));
 
-  // matches.json — full timing attack results
+  // matches.json — timing attack results (only withdrawals with identified sources)
   writeJson("matches.json", {
-    matches: results.map((r) => ({
-      withdrawal: r.withdrawal,
-      likelySources: r.likelySources.slice(0, 5),
-      anonymitySet: r.anonymitySet,
-      vulnerabilityLevel: r.vulnerabilityLevel,
-    })),
+    matches: results
+      .filter((r) => r.likelySources.length > 0)
+      .map((r) => ({
+        withdrawal: r.withdrawal,
+        likelySources: r.likelySources.slice(0, 3),
+        anonymitySet: r.anonymitySet,
+        vulnerabilityLevel: r.vulnerabilityLevel,
+      })),
     summary,
   });
 
@@ -169,8 +172,13 @@ async function main() {
   writeJson("shadowwire-matches.json", { matches: swMatchesOut });
 
   // ── SilentSwap ──
-  const ssInputs = db.getSilentSwapInputs(10000);
-  const ssOutputs = db.getSilentSwapOutputs(10000);
+  // Filter: only post-launch transactions and exclude dust/health-check pings (< 1000 lamports)
+  const DUST_THRESHOLD = 1000; // lamports
+  const ssInputs = db.getSilentSwapInputsByTimeRange(SILENTSWAP_LAUNCH_DATE, Date.now())
+    .filter(i => i.amount >= DUST_THRESHOLD);
+  const ssOutputs = db.getSilentSwapOutputsByTimeRange(SILENTSWAP_LAUNCH_DATE, Date.now())
+    .filter(o => o.amount >= DUST_THRESHOLD);
+  console.log(`  SilentSwap: ${ssInputs.length} inputs, ${ssOutputs.length} outputs (post-launch, non-dust)`);
 
   let ssPrivacyScore = 67;
   let ssLinkabilityRate = 0;

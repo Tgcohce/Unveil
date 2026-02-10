@@ -27,6 +27,7 @@ import {
   SilentSwapOutput,
   SilentSwapAccount,
   SILENTSWAP_RELAY_ADDRESS,
+  SILENTSWAP_LAUNCH_DATE,
 } from "./types";
 import { UnveilEventBus } from "./event-bus";
 
@@ -139,6 +140,10 @@ export class SilentSwapIndexer {
   private parseAsInput(tx: any, signature: string): SilentSwapInput | null {
     try {
       const timestamp = tx.blockTime ? tx.blockTime * 1000 : Date.now();
+
+      // Skip pre-launch transactions (test/dust activity before official Solana support)
+      if (timestamp < SILENTSWAP_LAUNCH_DATE) return null;
+
       const accountKeys = tx.transaction.message.accountKeys || [];
       const preBalances = tx.meta?.preBalances || [];
       const postBalances = tx.meta?.postBalances || [];
@@ -295,6 +300,10 @@ export class SilentSwapIndexer {
   private parseAsOutput(tx: any, signature: string): SilentSwapOutput | null {
     try {
       const timestamp = tx.blockTime ? tx.blockTime * 1000 : Date.now();
+
+      // Skip pre-launch transactions (test/dust activity before official Solana support)
+      if (timestamp < SILENTSWAP_LAUNCH_DATE) return null;
+
       const accountKeys = tx.transaction.message.accountKeys || [];
       const preBalances = tx.meta?.preBalances || [];
       const postBalances = tx.meta?.postBalances || [];

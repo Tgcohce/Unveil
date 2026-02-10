@@ -266,6 +266,10 @@ export interface ShadowWireAccount {
 export const SILENTSWAP_RELAY_ADDRESS =
   "CbKGgVKLJFb8bBrf58DnAkdryX6ubewVytn7X957YwNr";
 
+// SilentSwap officially launched on Solana on December 9, 2024.
+// Transactions before this date are test/dust activity from the relay address.
+export const SILENTSWAP_LAUNCH_DATE = 1733702400000; // 2024-12-09T00:00:00Z in Unix ms
+
 // SilentSwap EVM gateway addresses (for reference)
 export const SILENTSWAP_EVM_GATEWAYS = {
   mainnet: "0xA798d4D04faad17C309127C2B9B99Cc459635eDC",

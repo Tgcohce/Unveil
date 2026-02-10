@@ -1,17 +1,17 @@
 {
-  "lastUpdated": "2026-02-08T19:45:52.642Z",
+  "lastUpdated": "2026-02-10T04:11:04.849Z",
   "version": "1.0.0",
   "protocols": {
     "privacyCash": {
-      "deposits": 5419,
-      "withdrawals": 8239
+      "deposits": 18396,
+      "withdrawals": 28519
     },
     "shadowWire": {
       "transfers": 317
     },
     "silentSwap": {
-      "inputs": 138,
-      "outputs": 90
+      "inputs": 77,
+      "outputs": 85
     }
   }
 }
